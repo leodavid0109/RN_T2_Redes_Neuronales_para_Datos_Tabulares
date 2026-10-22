@@ -1,0 +1,9 @@
+# Datos originales (431 MB, exceden el límite de GitHub de 100 MB)
+data/raw/*.csv
+data/raw/*.zip
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/

@@ -1,0 +1,11 @@
+loan_status,registros,codificacion,porcentaje
+Current,601779,NA (se excluye),67.82
+Fully Paid,207723,0,23.41
+Charged Off,45248,1,5.1
+Late (31-120 days),11591,1,1.31
+Issued,8460,NA (se excluye),0.95
+In Grace Period,6253,NA (se excluye),0.7
+Late (16-30 days),2357,NA (se excluye),0.27
+Does not meet the credit policy. Status:Fully Paid,1988,0,0.22
+Default,1219,1,0.14
+Does not meet the credit policy. Status:Charged Off,761,1,0.09

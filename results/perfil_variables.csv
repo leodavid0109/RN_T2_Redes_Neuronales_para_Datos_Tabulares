@@ -1,0 +1,75 @@
+variable,tipo,pct_faltantes,n_unicos,valor_mas_frecuente,pct_valor_mas_frecuente,primera_fecha_con_dato
+id,int64,0.0,268530,54734,0.0,2007-06-01
+member_id,int64,0.0,268530,70473,0.0,2007-06-01
+loan_amnt,float64,0.0,1339,10000.0,7.1,2007-06-01
+funded_amnt,float64,0.0,1339,10000.0,7.07,2007-06-01
+funded_amnt_inv,float64,0.0,9563,10000.0,5.89,2007-06-01
+term,object,0.0,2, 36 months,77.03,2007-06-01
+int_rate,float64,0.0,535,12.12,2.81,2007-06-01
+installment,float64,0.0,47323,332.72,0.25,2007-06-01
+grade,object,0.0,7,B,29.28,2007-06-01
+sub_grade,object,0.0,35,B3,6.91,2007-06-01
+emp_title,object,5.57,138599,Manager,0.83,2007-06-01
+emp_length,object,3.99,11,10+ years,31.52,2007-06-01
+home_ownership,object,0.0,6,MORTGAGE,49.01,2007-06-01
+annual_inc,float64,0.0,20451,60000.0,3.88,2007-06-01
+verification_status,object,0.0,3,Verified,36.62,2007-06-01
+issue_d,object,0.0,103,Oct-2014,3.61,2007-06-01
+loan_status,object,0.0,6,Fully Paid,77.36,2007-06-01
+pymnt_plan,object,0.0,2,n,100.0,2007-06-01
+url,object,0.0,268530,https://www.lendingclub.com/browse/loanD,0.0,2007-06-01
+desc,object,65.75,91236, ,0.25,2007-06-01
+purpose,object,0.0,14,debt_consolidation,58.72,2007-06-01
+title,object,0.01,49883,Debt consolidation,29.48,2007-06-01
+zip_code,object,0.0,890,945xx,1.28,2007-06-01
+addr_state,object,0.0,51,CA,16.86,2007-06-01
+dti,float64,0.0,3990,0.0,0.12,2007-06-01
+delinq_2yrs,float64,0.01,24,0.0,83.59,2007-06-01
+earliest_cr_line,object,0.01,648,Oct-2000,0.83,2007-06-01
+inq_last_6mths,float64,0.01,28,0.0,48.53,2007-06-01
+mths_since_last_delinq,float64,55.17,127,9.0,1.85,2007-06-01
+mths_since_last_record,float64,87.09,123,0.0,3.69,2007-06-01
+open_acc,float64,0.01,59,9.0,9.56,2007-06-01
+pub_rec,float64,0.01,14,0.0,87.57,2007-06-01
+revol_bal,float64,0.0,48458,0.0,0.72,2007-06-01
+revol_util,float64,0.09,1223,0.0,0.72,2007-06-01
+total_acc,float64,0.01,108,20.0,3.64,2007-06-01
+initial_list_status,object,0.0,2,f,71.43,2007-06-01
+out_prncp,float64,0.0,11993,0.0,95.23,2007-06-01
+out_prncp_inv,float64,0.0,12088,0.0,95.23,2007-06-01
+total_pymnt,float64,0.0,255689,0.0,0.13,2007-06-01
+total_pymnt_inv,float64,0.0,248579,0.0,0.23,2007-06-01
+total_rec_prncp,float64,0.0,56170,10000.0,5.47,2007-06-01
+total_rec_int,float64,0.0,191554,0.0,0.26,2007-06-01
+total_rec_late_fee,float64,0.0,5245,0.0,96.87,2007-06-01
+recoveries,float64,0.0,23055,0.0,90.81,2007-06-01
+collection_recovery_fee,float64,0.0,20708,0.0,91.25,2007-06-01
+last_pymnt_d,object,0.25,98,Oct-2015,5.97,2007-06-01
+last_pymnt_amnt,float64,0.0,203298,0.0,0.25,2007-06-01
+next_pymnt_d,object,94.21,99,Feb-2016,73.03,2007-06-01
+last_credit_pull_d,object,0.01,103,Jan-2016,42.93,2007-06-01
+collections_12_mths_ex_med,float64,0.05,7,0.0,99.33,2007-08-01
+mths_since_last_major_derog,float64,80.92,152,45.0,1.65,2012-08-01
+policy_code,float64,0.0,1,1.0,100.0,2007-06-01
+application_type,object,0.0,2,INDIVIDUAL,100.0,2007-06-01
+annual_inc_joint,float64,100.0,3,36000.0,33.33,2015-10-01
+dti_joint,float64,100.0,3,11.08,33.33,2015-10-01
+verification_status_joint,object,100.0,3,Not Verified,33.33,2015-10-01
+acc_now_delinq,float64,0.01,6,0.0,99.69,2007-06-01
+tot_coll_amt,float64,24.8,4249,0.0,88.27,2012-08-01
+tot_cur_bal,float64,24.8,140776,0.0,0.03,2012-08-01
+open_acc_6m,float64,99.95,7,0.0,31.94,2015-12-01
+open_il_6m,float64,99.95,16,1.0,24.31,2015-12-01
+open_il_12m,float64,99.95,7,0.0,51.39,2015-12-01
+open_il_24m,float64,99.95,10,1.0,29.17,2015-12-01
+mths_since_rcnt_il,float64,99.95,50,4.0,10.0,2015-12-01
+total_bal_il,float64,99.95,128,0.0,11.81,2015-12-01
+il_util,float64,99.95,116,64.0,1.59,2015-12-01
+open_rv_12m,float64,99.95,8,0.0,27.08,2015-12-01
+open_rv_24m,float64,99.95,14,2.0,20.14,2015-12-01
+max_bal_bc,float64,99.95,139,0.0,4.17,2015-12-01
+all_util,float64,99.95,126,58.3,2.08,2015-12-01
+total_rev_hi_lim,float64,24.8,9811,13500.0,0.36,2012-08-01
+inq_fi,float64,99.95,9,0.0,43.06,2015-12-01
+total_cu_tl,float64,99.95,18,0.0,54.17,2015-12-01
+inq_last_12m,float64,99.95,17,2.0,20.83,2015-12-01

@@ -1,0 +1,19 @@
+{
+  "archivo": "loan.csv",
+  "filas_totales": 887379,
+  "columnas_totales": 74,
+  "fechas_issue_d_sin_parsear": 0,
+  "periodo_originacion_total": [
+    "2007-06-01",
+    "2015-12-01"
+  ],
+  "registros_con_etiqueta": 268530,
+  "registros_NA_excluidos": 618849,
+  "buenos_0": 209711,
+  "malos_1": 58819,
+  "tasa_incumplimiento_etiquetados": 0.219041,
+  "periodo_originacion_etiquetados": [
+    "2007-06-01",
+    "2015-12-01"
+  ]
+}

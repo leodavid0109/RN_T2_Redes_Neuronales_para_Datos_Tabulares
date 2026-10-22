@@ -1,0 +1,89 @@
+{
+  "registros_leidos": 887379,
+  "registros_con_etiqueta": 268530,
+  "caracteristicas_originales": 24,
+  "columnas_numericas": 25,
+  "columnas_categoricas": 4,
+  "columnas_de_salida_del_preprocesador": 99,
+  "semilla": 42,
+  "proporcion_aleatoria": [
+    0.7,
+    0.15,
+    0.15
+  ],
+  "preprocesador_ajustado_con": "entrenamiento_aleatorio",
+  "registros_usados_para_ajustar": 187970,
+  "particion_aleatoria": [
+    {
+      "split_random": "entrenamiento",
+      "registros": 187970,
+      "malos": 41173,
+      "tasa_malos_pct": 21.9,
+      "pct_del_total": 70.0
+    },
+    {
+      "split_random": "validacion",
+      "registros": 40280,
+      "malos": 8823,
+      "tasa_malos_pct": 21.9,
+      "pct_del_total": 15.0
+    },
+    {
+      "split_random": "prueba",
+      "registros": 40280,
+      "malos": 8823,
+      "tasa_malos_pct": 21.9,
+      "pct_del_total": 15.0
+    }
+  ],
+  "particion_temporal": [
+    {
+      "split_temporal": "entrenamiento",
+      "registros": 163541,
+      "malos": 31527,
+      "tasa_malos_pct": 19.28,
+      "pct_del_total": 60.9
+    },
+    {
+      "split_temporal": "validacion",
+      "registros": 74154,
+      "malos": 19441,
+      "tasa_malos_pct": 26.22,
+      "pct_del_total": 27.61
+    },
+    {
+      "split_temporal": "prueba",
+      "registros": 30835,
+      "malos": 7851,
+      "tasa_malos_pct": 25.46,
+      "pct_del_total": 11.48
+    }
+  ],
+  "valores_vacios_antes_de_imputar": {
+    "emp_length_anios": 10721,
+    "annual_inc": 4,
+    "delinq_2yrs": 29,
+    "antiguedad_cred_meses": 29,
+    "inq_last_6mths": 29,
+    "open_acc": 29,
+    "pub_rec": 29,
+    "revol_util": 249,
+    "total_acc": 29,
+    "acc_now_delinq": 29,
+    "collections_12_mths_ex_med": 145,
+    "mths_since_last_delinq": 148158,
+    "mths_since_last_record": 233873,
+    "tot_coll_amt": 66596,
+    "tot_cur_bal": 66596,
+    "total_rev_hi_lim": 66596
+  },
+  "tamano_parquet_MB": 6.38,
+  "versiones": {
+    "python": "3.10.12",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6",
+    "scikit-learn": "1.7.2",
+    "pyarrow": "25.0.1",
+    "joblib": "1.6.0"
+  }
+}
