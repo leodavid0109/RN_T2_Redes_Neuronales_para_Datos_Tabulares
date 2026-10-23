@@ -1,0 +1,9 @@
+hipotesis,variable,signo_esperado,coef_aleatoria,coef_temporal,coincide,diferencia_descriptiva_pp,resultado_descriptivo
+H1,dti,+,0.2236532000799499,0.1438313453815977,Sí,15.6,Confirmada
+H2,term,+,0.327322003170123,0.3895594061712818,Sí,16.72,Confirmada
+H3,revol_util,+,0.2190345715637658,0.2330661286220259,Sí,11.67,Confirmada
+H4,delinq_2yrs,+,0.052098953519493,0.049857505198471,Sí,3.2,Confirmada
+H5,inq_last_6mths,+,0.1751979857287424,0.1882207262999608,Sí,6.81,Confirmada
+H6,annual_inc,-,-0.282996592804168,-0.3885809462575589,Sí,10.53,Confirmada
+H7,antiguedad_cred_meses,-,-0.0111492460761716,-0.0073932872446163,"Sí, casi nulo",2.6,Confirmada
+H8,home_ownership (RENT menos MORTGAGE),+,0.2062376717473529,0.1511780511111808,Sí,4.7,Confirmada
