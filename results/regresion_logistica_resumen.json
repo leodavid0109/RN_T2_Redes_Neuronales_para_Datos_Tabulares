@@ -1,0 +1,52 @@
+{
+  "particiones": {
+    "aleatoria": {
+      "configuraciones_entrenadas": 10,
+      "C_elegido": 21.54434690031882,
+      "tiempo_busqueda_s": 19.12,
+      "parametros_entrenables": 100,
+      "iteraciones_modelo_elegido": 64,
+      "determinista": true
+    },
+    "temporal": {
+      "configuraciones_entrenadas": 10,
+      "C_elegido": 1.0,
+      "tiempo_busqueda_s": 16.339,
+      "parametros_entrenables": 100,
+      "iteraciones_modelo_elegido": 46,
+      "determinista": true
+    }
+  },
+  "penalizacion": "L2",
+  "criterio_seleccion": "log-loss en validación",
+  "class_weight": null,
+  "grilla_C": [
+    0.0001,
+    0.00046415888336127773,
+    0.002154434690031882,
+    0.01,
+    0.046415888336127774,
+    0.21544346900318823,
+    1.0,
+    4.641588833612772,
+    21.54434690031882,
+    100.0
+  ],
+  "max_iter": 2000,
+  "solver": "lbfgs",
+  "semillas": "ninguna (modelo determinista; varianza entre semillas = 0)",
+  "tiempo_total_busqueda_s": 35.459,
+  "hardware": {
+    "cpu": "AMD Ryzen 7 5700G with Radeon Graphics",
+    "nucleos": 2,
+    "so": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35"
+  },
+  "versiones": {
+    "python": "3.10.12",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.7.2",
+    "scipy": "1.15.3"
+  },
+  "columnas_de_entrada": 99
+}

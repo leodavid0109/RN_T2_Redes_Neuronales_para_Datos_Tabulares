@@ -1,0 +1,9 @@
+hipotesis,variable,texto,grupo_menos_riesgoso,tasa_menos_pct,grupo_mas_riesgoso,tasa_mas_pct,diferencia_pp,p_valor,p_texto,monotona,veredicto_descriptivo
+H1,dti,"A mayor razón deuda/ingreso, mayor probabilidad de incumplimiento",Q1,15.57,Q5,31.16,15.6,0.0,"< 0,001",sí,Confirmada
+H2,term,Los créditos a 60 meses incumplen más que los de 36 meses,36 meses,18.07,60 meses,34.78,16.72,0.0,"< 0,001",n/a,Confirmada
+H3,revol_util,"A mayor utilización del crédito rotativo, mayor riesgo",Q1,15.33,Q5,26.99,11.67,0.0,"< 0,001",sí,Confirmada
+H4,delinq_2yrs,Quien tuvo moras de 30 o más días en los últimos 2 años incumple más,0,21.38,1 o más,24.58,3.2,3.19e-35,"< 0,001",n/a,Confirmada
+H5,inq_last_6mths,"A más consultas de crédito recientes, mayor riesgo",0,19.9,3 o más,26.71,6.81,8.39e-91,"< 0,001",sí,Confirmada
+H6,annual_inc,"A mayor ingreso anual, menor riesgo",Q5,16.71,Q1,27.24,10.53,1.24e-263,"< 0,001",sí,Confirmada
+H7,antiguedad_cred_meses,"A mayor antigüedad crediticia, menor riesgo",Q5,20.8,Q1,23.41,2.6,9.44e-18,"< 0,001",sí,Confirmada
+H8,home_ownership,Quien alquila su vivienda incumple más que quien tiene hipoteca,MORTGAGE,19.61,RENT,24.31,4.7,5.04e-122,"< 0,001",n/a,Confirmada
