@@ -1,0 +1,22 @@
+# Análisis de sensibilidad posterior a la selección principal; no reemplaza width64 sin peso.
+seeds: [41, 42, 43]
+device: cpu
+num_threads: 2
+budget_cpu_minutes: 20
+batch_size: 2048
+max_epochs: 16
+patience: 4
+min_delta: 0.0001
+early_stopping_metric: unweighted_validation_logloss
+selection_metric: mean_validation_logloss_paired_seeds
+architecture: width64
+conditions:
+  - id: control_pos_weight_1
+    hypothesis: Reproduce el ajuste principal sin modificar la frecuencia efectiva de la clase positiva.
+    weight: 1.0
+  - id: moderate_pos_weight_2
+    hypothesis: Dar peso doble a positivos puede subir discriminación con un desplazamiento de PD moderado.
+    weight: 2.0
+  - id: train_ratio_pos_weight
+    hypothesis: Compensar por completo la razón de clases puede alterar más el umbral y la calibración.
+    weight: train_only_n0_div_n1

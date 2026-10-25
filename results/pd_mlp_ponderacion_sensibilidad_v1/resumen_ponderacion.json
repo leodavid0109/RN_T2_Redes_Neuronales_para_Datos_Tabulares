@@ -1,0 +1,81 @@
+{
+  "modo": "analisis_sensibilidad_ponderacion_posterior",
+  "no_es_nueva_seleccion_final_imparcial": true,
+  "criterio_uso": "comparación primaria solo con log-loss de validación; prueba se reporta como sensibilidad y no se usa para elegir",
+  "arquitectura": "width64 seleccionada previamente sin ponderación",
+  "preprocesador": {
+    "artefacto": "models/preprocessor.joblib",
+    "base_de_ajuste_registrada": "entrenamiento_aleatorio",
+    "descripcion": "Ajustado con split_random=entrenamiento; incluye registros que son validación/prueba temporal.",
+    "limitacion_evaluacion_temporal": true,
+    "decision_equipo": "Se conserva el artefacto actual por decisión comunicada del equipo; no equivale a demostrar ausencia de fuga.",
+    "evidencia_prueba_alternativa_a": "No se encontró en el repositorio informe, métricas ni definición exacta de la alternativa probada.",
+    "metricas_y_diferencia_alternativa": null
+  },
+  "hipotesis_y_condiciones": [
+    {
+      "id": "control_pos_weight_1",
+      "hypothesis": "Reproduce el ajuste principal sin modificar la frecuencia efectiva de la clase positiva.",
+      "weight": 1.0
+    },
+    {
+      "id": "moderate_pos_weight_2",
+      "hypothesis": "Dar peso doble a positivos puede subir discriminación con un desplazamiento de PD moderado.",
+      "weight": 2.0
+    },
+    {
+      "id": "train_ratio_pos_weight",
+      "hypothesis": "Compensar por completo la razón de clases puede alterar más el umbral y la calibración.",
+      "weight": "train_only_n0_div_n1"
+    }
+  ],
+  "semillas_pareadas": [
+    41,
+    42,
+    43
+  ],
+  "numero_corridas": 18,
+  "max_epocas_por_corrida": 16,
+  "presupuesto_cpu_minutos": 20,
+  "conteos_y_pesos_solo_train": {
+    "aleatoria": {
+      "train_n0": 146797,
+      "train_n1": 41173,
+      "train_prevalencia": 0.21904027238389104,
+      "ratio_n0_div_n1": 3.5653705098001116,
+      "validacion_prevalencia": 0.21904170804369413,
+      "prueba_prevalencia": 0.21904170804369413
+    },
+    "temporal": {
+      "train_n0": 132014,
+      "train_n1": 31527,
+      "train_prevalencia": 0.1927773463535138,
+      "ratio_n0_div_n1": 4.187331493640372,
+      "validacion_prevalencia": 0.26217061790328233,
+      "prueba_prevalencia": 0.2546132641478839
+    }
+  },
+  "tiempo_suma_entrenamiento_s": 411.6850716000008,
+  "tiempo_pared_s": 416.12145619999865,
+  "class_weight": "sin remuestreo; pos_weight en BCEWithLogitsLoss solo para train; parada evalúa log-loss no ponderada en validación",
+  "decision": "el control pos_weight=1 conserva el modelo principal; tratamientos son análisis de sensibilidad",
+  "versiones": {
+    "python": "3.12.14",
+    "torch": "2.8.0+cpu",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3"
+  },
+  "hashes_entrada": {
+    "data/processed/pd.parquet": "636d23461ef3306d5629d2ce44825b13277cb04272cf2e32b9be694ee8849a24",
+    "models/preprocessor.joblib": "be8a67e93aa423f2c6b542b25ebbc582853cf4bcd9043e098ea9cad7b202a073",
+    "models/pd_logreg_aleatoria.joblib": "4b279e0716aeb03b4c050fcfe68c110871abed3e0d16ba6595930c1b9c478131",
+    "models/pd_logreg_temporal.joblib": "d60b91fafd7ab84141f1e3b63c5fcf1f2423a13c29bb466060835f6a31f6105e",
+    "results/pd_mlp_search_independiente_v1/pd_mlp_resumen.json": "c9efa766b7fbc5a622232d0ffcc3648bb187786dc3715bad7c69edb24f4d304f",
+    "results/pd_mlp_final_particionado/pd_mlp_resumen.json": "4c26d639e6da9a744e73c5d7fd60e2049beae36eba0b93becee04db0a85fc075",
+    "configs/mlp_pd.yaml": "039ef58deb902965f29b5bd8a7dd239d2cdbd59cc6f0b7d10374f1294338cb49",
+    "configs/mlp_pd_ponderacion.yaml": "c3df44fc6be217f9c0f76468cdfcde75ef68671a40bfb2b9124bdea14de7eaac",
+    "scripts/15_experimento_ponderacion_pd.py": "d901500fadc399c59c9632d349fdf92ac8bad960842452918e1c804fbcc015aa",
+    "src/mlp_pd.py": "a4b4f9b9f80a6c6e7085916848b181d982eec84a168363e6d6638d8f366859be",
+    "src/metricas.py": "b2c3b0c69d75924c36a8f5f25f22ccc5c0c012fb67a979c39eb3c199c9a0c459"
+  }
+}

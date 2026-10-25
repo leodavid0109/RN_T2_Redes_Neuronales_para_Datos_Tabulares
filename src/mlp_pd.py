@@ -84,14 +84,16 @@ def entrenar_una_corrida(x_train: np.ndarray, y_train: np.ndarray,
                          x_valid: np.ndarray, y_valid: np.ndarray,
                          model_config: dict[str, Any], *, seed: int, batch_size: int,
                          max_epochs: int, patience: int, min_delta: float,
-                         num_threads: int = 2) -> dict[str, Any]:
-    """Entrena con BCE de logits y restaura el checkpoint con menor log-loss de validación."""
+                         num_threads: int = 2, pos_weight: float = 1.0) -> dict[str, Any]:
+    """Entrena con BCE de logits, peso positivo opcional y parada por log-loss sin ponderar."""
     if len(x_train) != len(y_train) or len(x_valid) != len(y_valid):
         raise ValueError("X e y deben tener el mismo número de filas")
     if set(np.unique(y_train)).difference({0, 1}) or set(np.unique(y_valid)).difference({0, 1}):
         raise ValueError("El objetivo debe contener las etiquetas binarias 0 y 1")
     if not len(x_train) or not len(x_valid):
         raise ValueError("Entrenamiento y validación deben tener filas")
+    if not np.isfinite(pos_weight) or pos_weight <= 0:
+        raise ValueError("pos_weight debe ser un número finito positivo")
 
     torch.set_num_threads(num_threads)
     set_seed(seed)
@@ -110,7 +112,9 @@ def entrenar_una_corrida(x_train: np.ndarray, y_train: np.ndarray,
         model.parameters(), lr=float(model_config["learning_rate"]),
         weight_decay=float(model_config["weight_decay"]),
         **({"momentum": 0.9} if model_config["optimizer"] == "sgd" else {}))
-    loss_fn = nn.BCEWithLogitsLoss()  # máxima verosimilitud Bernoulli, estable numéricamente
+    loss_fn = nn.BCEWithLogitsLoss(pos_weight=torch.tensor([float(pos_weight)], device=device))
+    # La parada se evalúa en log-loss ordinaria: las probabilidades siguen representando PD.
+    val_loss_fn = nn.BCEWithLogitsLoss()
     yv_tensor = torch.from_numpy(y_valid).to(device)
 
     best_loss = float("inf")
@@ -130,7 +134,7 @@ def entrenar_una_corrida(x_train: np.ndarray, y_train: np.ndarray,
             optimizer.step()
 
         val_logits = torch.from_numpy(_logits(model, x_valid, batch_size * 4, device)).to(device)
-        val_loss = float(loss_fn(val_logits, yv_tensor).item())
+        val_loss = float(val_loss_fn(val_logits, yv_tensor).item())
         history.append({"epoch": epoch, "train_loss_last_batch": float(loss.item()), "val_logloss": val_loss})
         if val_loss < best_loss - min_delta:
             best_loss = val_loss

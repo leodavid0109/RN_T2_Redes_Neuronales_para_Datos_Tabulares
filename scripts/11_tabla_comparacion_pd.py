@@ -3,7 +3,7 @@
 La fila de la regresión logística sale de results/regresion_logistica_*.  La fila de la red se llena
 cuando existen los archivos de Leonard (contrato, mismos nombres de columnas que los de la logística):
   results/pd_mlp_metricas_por_semilla.csv   semilla, particion, conjunto, auc, gini, ks, brier, logloss  (30 semillas)
-  results/pd_mlp_resumen.json               configuraciones_entrenadas, tiempo_total_busqueda_s, parametros_entrenables
+  results/pd_mlp_resumen.json               configuraciones_entrenadas, tiempos de búsqueda/final, parametros_entrenables
   results/curva_calibracion_mlp.csv         semilla, particion, conjunto, grupo, n, prob_predicha_media, tasa_observada
 Sin esos archivos solo se escribe la fila de la logística. Estadísticos: media, desviación estándar muestral
 (ddof = 1), mejor y peor sobre las semillas; la logística es determinista (varianza entre semillas = 0).
@@ -12,9 +12,12 @@ Uso:  python scripts/11_tabla_comparacion_pd.py [--mlp DIRECTORIO_CON_ARCHIVOS_D
 """
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
+RAIZ = Path(__file__).resolve().parents[1]
+os.environ.setdefault("MPLCONFIGDIR", str(RAIZ / ".venv" / "matplotlib-config"))
 import matplotlib
 import numpy as np
 import pandas as pd
@@ -22,26 +25,25 @@ import pandas as pd
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
-RAIZ = Path(__file__).resolve().parents[1]
 ap = argparse.ArgumentParser()
 ap.add_argument("--mlp", default=str(RAIZ / "results"))
 ap.add_argument("--salida", default=str(RAIZ / "results"))
 ap.add_argument("--figuras", default=str(RAIZ / "figures"))
 args = ap.parse_args()
 dir_mlp, dir_salida, dir_fig = Path(args.mlp), Path(args.salida), Path(args.figuras)
-METRICAS = ["auc", "gini", "ks", "brier"]
-MENOR_ES_MEJOR = {"brier"}
+METRICAS = ["auc", "gini", "ks", "brier", "logloss"]
+MENOR_ES_MEJOR = {"brier", "logloss"}
 CONJUNTOS = ["validacion", "prueba"]
 
 
-def filas_modelo(tarea, modelo, particion, conjunto, config, tiempo, params, semillas, valores):
+def filas_modelo(tarea, modelo, particion, conjunto, config, tiempos, params, semillas, valores):
     """valores: DataFrame con una fila por semilla y una columna por métrica."""
     out = []
     for m in METRICAS:
         v = valores[m].to_numpy(dtype=float)
         mejor, peor = (v.min(), v.max()) if m in MENOR_ES_MEJOR else (v.max(), v.min())
         out.append({"tarea": tarea, "modelo": modelo, "particion": particion, "conjunto": conjunto,
-                    "configuraciones_entrenadas": config, "tiempo_total_s": tiempo, "parametros_entrenables": params,
+                    "configuraciones_entrenadas": config, **tiempos, "parametros_entrenables": params,
                     "semillas": semillas, "metrica": m, "media": v.mean(), "desv_est": v.std(ddof=1) if len(v) > 1 else 0.0,
                     "mejor": mejor, "peor": peor})
     return out
@@ -50,13 +52,23 @@ def filas_modelo(tarea, modelo, particion, conjunto, config, tiempo, params, sem
 # ---- Regresión logística ----
 met = pd.read_csv(RAIZ / "results" / "regresion_logistica_metricas.csv")
 res = json.loads((RAIZ / "results" / "regresion_logistica_resumen.json").read_text(encoding="utf-8"))
+logreg_total = float(res["tiempo_total_busqueda_s"])
+assert abs(sum(float(info["tiempo_busqueda_s"]) for info in res["particiones"].values()) - logreg_total) < 1e-9
 filas = []
 for part, info in res["particiones"].items():
     for conj in CONJUNTOS:
         fila = met[(met["particion"] == part) & (met["conjunto"] == conj)]
         assert len(fila) == 1
+        tiempos = {
+            "tiempo_busqueda_s": float(info["tiempo_busqueda_s"]),
+            "tiempo_corridas_finales_s": None,
+            "tiempo_corridas_finales_global_s": None,
+            "tiempo_total_s": float(info["tiempo_busqueda_s"]),
+            "tiempo_total_global_s": logreg_total,
+            "alcance_tiempo": "búsqueda por partición; no hay tiempo separado de corrida final registrado para logística",
+        }
         filas += filas_modelo("PD", "Regresión logística", part, conj, info["configuraciones_entrenadas"],
-                              info["tiempo_busqueda_s"], info["parametros_entrenables"], "0 (determinista)", fila)
+                              tiempos, info["parametros_entrenables"], "0 (determinista)", fila)
 
 # ---- Red neuronal (si existen los archivos) ----
 f_met, f_res, f_cal = (dir_mlp / "pd_mlp_metricas_por_semilla.csv", dir_mlp / "pd_mlp_resumen.json",
@@ -65,14 +77,36 @@ hay_red = f_met.exists() and f_res.exists()
 if hay_red:
     mm = pd.read_csv(f_met)
     rr = json.loads(f_res.read_text(encoding="utf-8"))
-    n_sem = mm["semilla"].nunique()
+    search_path = RAIZ / "results" / "pd_mlp_search_independiente_v1" / "pd_mlp_resumen.json"
+    search_summary = json.loads(search_path.read_text(encoding="utf-8"))
+    search_total = float(search_summary["tiempo_total_busqueda_s"])
+    final_total = float(rr["tiempo_total_entrenamiento_final_s"])
+    assert abs(sum(float(v) for v in search_summary["tiempo_total_busqueda_s_por_particion"].values()) - search_total) < 1e-6
+    assert abs(float(rr["tiempo_total_busqueda_s"]) - search_total) < 1e-6
+    assert final_total > 0 and search_total > 0
+    n_sem = mm.loc[mm["conjunto"] == "prueba", "semilla"].nunique()
     assert n_sem >= 30, f"el enunciado exige al menos 30 semillas y hay {n_sem}"
     for part in sorted(mm["particion"].unique()):
         for conj in CONJUNTOS:
             sub = mm[(mm["particion"] == part) & (mm["conjunto"] == conj)]
             assert sub["semilla"].is_unique and len(sub) == n_sem, (part, conj)
-            filas += filas_modelo("PD", "MLP", part, conj, rr["configuraciones_entrenadas"], rr["tiempo_total_busqueda_s"],
-                                  rr["parametros_entrenables"], n_sem, sub)
+            n_config = rr.get("configuraciones_entrenadas_por_particion", {}).get(
+                part, rr["configuraciones_entrenadas"])
+            search_time = search_summary["tiempo_total_busqueda_s_por_particion"][part]
+            # El manifiesto final solo registra el entrenamiento final agregado; no se reparte entre splits.
+            tiempos = {
+                "tiempo_busqueda_s": float(search_time),
+                "tiempo_corridas_finales_s": None,
+                "tiempo_corridas_finales_global_s": final_total,
+                "tiempo_total_s": None,
+                "tiempo_total_global_s": search_total + final_total,
+                "alcance_tiempo": "búsqueda por partición; corridas finales y suma total solo registradas globalmente",
+            }
+            params = rr.get("parametros_entrenables", {})
+            if isinstance(params, dict):
+                params = params.get(part)
+            filas += filas_modelo("PD", "MLP", part, conj, n_config, tiempos,
+                                  params, n_sem, sub)
 else:
     print("No se encontraron los archivos de la red en", dir_mlp, "- se escribe solo la fila de la logística.")
 

@@ -81,7 +81,7 @@ Las versiones fijadas, comandos ejecutados, prueba de scorecard, lectura del par
 
 ## MLP de probabilidad de incumplimiento (Persona B)
 
-El protocolo, sus límites, la corrida demostrativa observada y los comandos están en [`docs/entorno_y_balance_pd.md`](docs/entorno_y_balance_pd.md). La demo carga el mismo `data/processed/pd.parquet` y `models/preprocessor.joblib` que la logística, usa `feature_names_in_` y las máscaras `split_random`/`split_temporal`, y guarda salidas nuevas bajo `results/pd_mlp_demo/` y `models/pd_mlp_demo/`. Verifica ejecución e integración, no desempeño final. La búsqueda global actual tiene solapamiento entre validaciones y pruebas de las dos particiones; no se debe usar para seleccionar la arquitectura final. Los resultados temporales deben repetirse cuando A corrija el ajuste del preprocesador y regenere la logística. No se han ejecutado la búsqueda válida ni las 30 semillas finales.
+El protocolo, sus límites, la decisión comunicada sobre el preprocesador y los comandos están en [`docs/entorno_y_balance_pd.md`](docs/entorno_y_balance_pd.md). La demo carga el mismo parquet/preprocesador que la logística y verifica ejecución e integración; no desempeño final. La búsqueda selecciona por separado dentro de cada partición y no usa prueba. Se conserva el preprocesador actual por decisión comunicada del equipo; la limitación temporal permanece documentada, así que sus resultados temporales deben repetirse si A cambia el ajuste y regenera la logística. La búsqueda independiente y las 30 semillas por partición ya se ejecutaron sobre los artefactos actuales; siguen siendo provisionales para interpretación temporal por la limitación del preprocesador.
 
 ```powershell
 .\.venv\Scripts\python.exe scripts/14_entrenar_mlp_pd.py --mode demo
@@ -91,4 +91,16 @@ El protocolo, sus límites, la corrida demostrativa observada y los comandos est
 python scripts/14_entrenar_mlp_pd.py --mode demo
 ```
 
-La búsqueda pequeña se ejecuta con `--mode search`; la corrida definitiva de 30 semillas está bloqueada hasta que el frente de datos regenere preprocesador, datos y logística coherentes, y solo entonces se confirme explícitamente el protocolo.
+La búsqueda con `--mode search` selecciona independientemente una configuración por partición y usa solo la validación de esa partición; las configuraciones pueden coincidir, como ocurrió en esta ejecución. El modo `--mode final` conserva hashes del parquet, preprocesador, modelos logísticos, protocolo, configuración y código para comprobar que la búsqueda sigue correspondiendo a los artefactos evaluados. Los resultados temporales conservan la limitación conocida del ajuste vigente del preprocesador; la decisión del equipo de mantenerlo no demuestra ausencia de fuga.
+
+La comparación PD reporta por separado búsqueda, corridas finales globales y sumas calculables; el tiempo de entrenamiento final del MLP no está desglosado por partición. Una sensibilidad posterior con `pos_weight` (control 1, peso 2 y cociente de clases de train) está documentada en `docs/entorno_y_balance_pd.md`; no reemplaza el modelo principal y sus pruebas no se usan para elegir pesos.
+
+Reproducción en carpetas de salida nuevas (el script no sobrescribe resultados existentes):
+
+```powershell
+python scripts/14_entrenar_mlp_pd.py --mode search --output-dir results/pd_mlp_search_reproduccion --models-dir models/pd_mlp_search_reproduccion
+python scripts/14_entrenar_mlp_pd.py --mode final --search-dir results/pd_mlp_search_reproduccion --output-dir results/pd_mlp_final_reproduccion --models-dir models/pd_mlp_final_reproduccion
+python scripts/11_tabla_comparacion_pd.py --mlp results/pd_mlp_final_reproduccion --salida results/pd_comparacion_mlp_reproduccion --figuras figures/pd_mlp_comparacion_reproduccion
+```
+
+En Linux se ejecutan los mismos comandos después de activar `.venv`.

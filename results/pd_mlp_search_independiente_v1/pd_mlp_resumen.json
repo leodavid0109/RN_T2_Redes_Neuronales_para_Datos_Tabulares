@@ -1,0 +1,175 @@
+{
+  "modo": "search",
+  "provisional": true,
+  "motivo_provisional": "El preprocesador vigente se conserva por decisión comunicada del equipo; temporalmente fue ajustado con entrenamiento aleatorio, que incluye filas temporales de validación/prueba.",
+  "protocolo_seleccion": "independiente_por_particion",
+  "seleccion_final_habilitada": true,
+  "criterio_seleccion": "mínima media de log-loss de validación entre semillas exploratorias, calculada por separado dentro de cada partición; no se consultan pruebas ni se agregan validaciones de protocolos distintos",
+  "configuraciones_elegidas": {
+    "aleatoria": {
+      "id": "width64",
+      "hypothesis": "Más unidades en la capa oculta pueden representar interacciones no lineales adicionales.",
+      "changed_from_base": "Anchura 32 a 64; demás factores iguales.",
+      "hidden_layers": [
+        64
+      ],
+      "activation": "relu",
+      "dropout": 0.0,
+      "weight_decay": 0.0,
+      "optimizer": "adam",
+      "learning_rate": 0.001
+    },
+    "temporal": {
+      "id": "width64",
+      "hypothesis": "Más unidades en la capa oculta pueden representar interacciones no lineales adicionales.",
+      "changed_from_base": "Anchura 32 a 64; demás factores iguales.",
+      "hidden_layers": [
+        64
+      ],
+      "activation": "relu",
+      "dropout": 0.0,
+      "weight_decay": 0.0,
+      "optimizer": "adam",
+      "learning_rate": 0.001
+    }
+  },
+  "configuracion_elegida": {
+    "aleatoria": {
+      "id": "width64",
+      "hypothesis": "Más unidades en la capa oculta pueden representar interacciones no lineales adicionales.",
+      "changed_from_base": "Anchura 32 a 64; demás factores iguales.",
+      "hidden_layers": [
+        64
+      ],
+      "activation": "relu",
+      "dropout": 0.0,
+      "weight_decay": 0.0,
+      "optimizer": "adam",
+      "learning_rate": 0.001
+    },
+    "temporal": {
+      "id": "width64",
+      "hypothesis": "Más unidades en la capa oculta pueden representar interacciones no lineales adicionales.",
+      "changed_from_base": "Anchura 32 a 64; demás factores iguales.",
+      "hidden_layers": [
+        64
+      ],
+      "activation": "relu",
+      "dropout": 0.0,
+      "weight_decay": 0.0,
+      "optimizer": "adam",
+      "learning_rate": 0.001
+    }
+  },
+  "logloss_validacion_media_por_particion": {
+    "aleatoria": 0.47856978818891427,
+    "temporal": 0.530348826763527
+  },
+  "preprocesador": {
+    "artefacto": "models/preprocessor.joblib",
+    "base_de_ajuste_registrada": "entrenamiento_aleatorio",
+    "descripcion": "Ajustado con split_random=entrenamiento; incluye registros que son validación/prueba temporal.",
+    "limitacion_evaluacion_temporal": true,
+    "decision_equipo": "Se conserva el artefacto actual por decisión comunicada del equipo; no equivale a demostrar ausencia de fuga.",
+    "evidencia_prueba_alternativa_a": "No se encontró en el repositorio informe, métricas ni definición exacta de la alternativa probada.",
+    "metricas_y_diferencia_alternativa": null
+  },
+  "preprocesador_ajustado_con": "entrenamiento_aleatorio",
+  "limitacion_temporal_preprocesador": true,
+  "cruces_entre_particiones_no_usados_en_seleccion": {
+    "validacion_aleatoria_en_prueba_temporal": 4540,
+    "prueba_aleatoria_en_validacion_temporal": 11154
+  },
+  "class_weight": "none",
+  "filas_por_particion": {
+    "aleatoria": {
+      "entrenamiento": 187970,
+      "validacion": 40280,
+      "prueba": 40280
+    },
+    "temporal": {
+      "entrenamiento": 163541,
+      "validacion": 74154,
+      "prueba": 30835
+    }
+  },
+  "columnas_originales_preprocesador": [
+    "loan_amnt",
+    "term_meses",
+    "emp_length_anios",
+    "annual_inc",
+    "dti",
+    "delinq_2yrs",
+    "antiguedad_cred_meses",
+    "inq_last_6mths",
+    "open_acc",
+    "pub_rec",
+    "revol_bal",
+    "revol_util",
+    "total_acc",
+    "acc_now_delinq",
+    "collections_12_mths_ex_med",
+    "mths_since_last_delinq",
+    "mths_since_last_record",
+    "tot_coll_amt",
+    "tot_cur_bal",
+    "total_rev_hi_lim",
+    "falta_mths_since_last_delinq",
+    "falta_mths_since_last_record",
+    "falta_tot_coll_amt",
+    "falta_tot_cur_bal",
+    "falta_total_rev_hi_lim",
+    "home_ownership",
+    "verification_status",
+    "purpose",
+    "addr_state"
+  ],
+  "columnas_transformadas": 99,
+  "probabilidad_reportada": "sigmoid(logit) = P(objetivo=1 = incumplimiento)",
+  "perdida_entrenamiento": "BCEWithLogitsLoss",
+  "criterio_parada_temprana": "log-loss de validación de la partición correspondiente",
+  "configuraciones_entrenadas": 12,
+  "configuraciones_entrenadas_por_particion": {
+    "aleatoria": 12,
+    "temporal": 12
+  },
+  "semillas_exploratorias": [
+    2026,
+    2027
+  ],
+  "semillas_finales": [],
+  "parametros_entrenables": {
+    "aleatoria": 6465,
+    "temporal": 6465
+  },
+  "tiempo_total_busqueda_s": 1602.258356,
+  "tiempo_total_busqueda_s_por_particion": {
+    "aleatoria": 835.801914,
+    "temporal": 766.456442
+  },
+  "tiempo_total_entrenamiento_final_s": null,
+  "tiempo_total_ejecucion_s": 1606.900785,
+  "presupuesto_cpu_minutos_declarado": {
+    "search": 60,
+    "final": 75
+  },
+  "dispositivo": "cpu",
+  "versiones": {
+    "python": "3.12.14",
+    "torch": "2.8.0+cpu",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3"
+  },
+  "hashes_entrada": {
+    "data\\processed\\pd.parquet": "636d23461ef3306d5629d2ce44825b13277cb04272cf2e32b9be694ee8849a24",
+    "models\\preprocessor.joblib": "be8a67e93aa423f2c6b542b25ebbc582853cf4bcd9043e098ea9cad7b202a073",
+    "models\\pd_logreg_aleatoria.joblib": "4b279e0716aeb03b4c050fcfe68c110871abed3e0d16ba6595930c1b9c478131",
+    "models\\pd_logreg_temporal.joblib": "d60b91fafd7ab84141f1e3b63c5fcf1f2423a13c29bb466060835f6a31f6105e",
+    "results\\regresion_logistica_resumen.json": "76056ea34c6945c7f88ce28c110c54929ddfc556e1caabc4d152fe3b2448d545",
+    "results\\verificacion_datos_procesados.json": "452a7a224ca606dcf245e5e5817fea18d86562be121034c94de5d7b0f9b7531f",
+    "scripts\\14_entrenar_mlp_pd.py": "12f5af8dec981f713abaf6ce62b94a1a186d776c760f6fc3b7de34094b4acf81",
+    "src\\mlp_pd.py": "581bbe9cf15016eaae43cd80fee703f9214438fdecfee898becb865b908e306b",
+    "src\\metricas.py": "b2c3b0c69d75924c36a8f5f25f22ccc5c0c012fb67a979c39eb3c199c9a0c459",
+    "configs\\mlp_pd.yaml": "039ef58deb902965f29b5bd8a7dd239d2cdbd59cc6f0b7d10374f1294338cb49"
+  }
+}

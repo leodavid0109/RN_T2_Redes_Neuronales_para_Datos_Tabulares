@@ -1,51 +1,135 @@
-# Protocolo inicial de Persona B. Todos los experimentos iniciales son sin balanceo.
+# Protocolo de Persona B. La selección es independiente para cada partición.
+# Los dos conjuntos de filas se solapan entre protocolos, así que nunca se promedian
+# validaciones aleatoria/temporal para escoger una configuración.
 device: cpu
 num_threads: 2
-batch_size: 1024
-max_epochs: 40
-patience: 5
+batch_size: 2048
+max_epochs: 16
+patience: 4
 min_delta: 0.0001
 early_stopping_metric: logloss
-selection_metric: mean_validation_logloss
-search_seed: 2026
+selection_metric: mean_validation_logloss_by_partition
+search_seeds: [2026, 2027]
 final_seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
 class_weight: none
+planned_cpu_budget_minutes:
+  search: 60
+  final: 75
 
-# Variar capacidad, activación, dropout/L2, optimizador y learning rate.
-# Se elige una sola configuración global con el promedio simple del log-loss
-# de validación aleatoria y temporal; nunca se mira el test para escoger.
+# Base y comparaciones de un factor. Las diferencias se interpretan respecto a base.
+# SGD se compara al mismo lr; el ensayo no pretende optimizar exhaustivamente ese método.
 search:
-  - id: shallow32_relu_adam
+  - id: base_32_relu_adam
+    hypothesis: Referencia pequeña y regularización mínima para fijar el punto de comparación.
+    changed_from_base: Base
+    hidden_layers: [32]
+    activation: relu
+    dropout: 0.0
+    weight_decay: 0.0
+    optimizer: adam
+    learning_rate: 0.001
+  - id: width64
+    hypothesis: Más unidades en la capa oculta pueden representar interacciones no lineales adicionales.
+    changed_from_base: Anchura 32 a 64; demás factores iguales.
+    hidden_layers: [64]
+    activation: relu
+    dropout: 0.0
+    weight_decay: 0.0
+    optimizer: adam
+    learning_rate: 0.001
+  - id: depth32_16
+    hypothesis: Una segunda capa permite composiciones jerárquicas de las características.
+    changed_from_base: Profundidad de una a dos capas; añade 16 unidades.
+    hidden_layers: [32, 16]
+    activation: relu
+    dropout: 0.0
+    weight_decay: 0.0
+    optimizer: adam
+    learning_rate: 0.001
+  - id: activation_tanh
+    hypothesis: La no linealidad saturante puede ajustar relaciones suaves diferentes de ReLU.
+    changed_from_base: Activación ReLU a tanh.
+    hidden_layers: [32]
+    activation: tanh
+    dropout: 0.0
+    weight_decay: 0.0
+    optimizer: adam
+    learning_rate: 0.001
+  - id: dropout_020
+    hypothesis: Apagar aleatoriamente 20% de activaciones puede reducir sobreajuste.
+    changed_from_base: Dropout 0 a 0.20.
+    hidden_layers: [32]
+    activation: relu
+    dropout: 0.2
+    weight_decay: 0.0
+    optimizer: adam
+    learning_rate: 0.001
+  - id: weight_decay_1e4
+    hypothesis: Penalizar pesos grandes puede mejorar generalización y calibración.
+    changed_from_base: Weight decay 0 a 1e-4.
     hidden_layers: [32]
     activation: relu
     dropout: 0.0
     weight_decay: 0.0001
     optimizer: adam
     learning_rate: 0.001
-  - id: deep64_32_relu_dropout_adam
-    hidden_layers: [64, 32]
+  - id: optimizer_adamw
+    hypothesis: La actualización desacoplada de AdamW puede diferir de Adam con la misma penalización.
+    changed_from_base: Respecto a base cambia optimizador y weight decay; se compara directamente con weight_decay_1e4 para aislar el algoritmo.
+    hidden_layers: [32]
+    activation: relu
+    dropout: 0.0
+    weight_decay: 0.0001
+    optimizer: adamw
+    learning_rate: 0.001
+  - id: optimizer_sgd
+    hypothesis: SGD con momentum sirve como referencia de optimización no adaptativa.
+    changed_from_base: Optimizador Adam a SGD con momentum 0.9; demás factores iguales.
+    hidden_layers: [32]
+    activation: relu
+    dropout: 0.0
+    weight_decay: 0.0
+    optimizer: sgd
+    learning_rate: 0.001
+  - id: learning_rate_0003
+    hypothesis: Una tasa menor puede estabilizar la convergencia y reducir oscilaciones.
+    changed_from_base: Tasa 0.001 a 0.0003.
+    hidden_layers: [32]
+    activation: relu
+    dropout: 0.0
+    weight_decay: 0.0
+    optimizer: adam
+    learning_rate: 0.0003
+  - id: learning_rate_003
+    hypothesis: Una tasa mayor puede converger más rápido, con riesgo de inestabilidad.
+    changed_from_base: Tasa 0.001 a 0.003.
+    hidden_layers: [32]
+    activation: relu
+    dropout: 0.0
+    weight_decay: 0.0
+    optimizer: adam
+    learning_rate: 0.003
+  # Dos interacciones predeclaradas; cualquier efecto se atribuye al conjunto de cambios.
+  - id: combo_width64_dropout020
+    hypothesis: Comprobar si la regularización permite aprovechar una red más ancha.
+    changed_from_base: Anchura 64 y dropout 0.20; dos factores juntos.
+    hidden_layers: [64]
     activation: relu
     dropout: 0.2
     weight_decay: 0.0
     optimizer: adam
     learning_rate: 0.001
-  - id: shallow64_tanh_l2_adamw
-    hidden_layers: [64]
-    activation: tanh
-    dropout: 0.0
-    weight_decay: 0.001
-    optimizer: adamw
-    learning_rate: 0.0005
-  - id: deep32_16_gelu_l2_sgd
+  - id: combo_depth_weight_decay
+    hypothesis: Comprobar la interacción entre mayor profundidad y penalización L2.
+    changed_from_base: Capas [32,16] y weight decay 1e-4; dos factores juntos.
     hidden_layers: [32, 16]
-    activation: gelu
-    dropout: 0.1
+    activation: relu
+    dropout: 0.0
     weight_decay: 0.0001
-    optimizer: sgd
-    learning_rate: 0.01
+    optimizer: adam
+    learning_rate: 0.001
 
-# Modo de validación de extremo a extremo: mismo dataset y mismos splits, una
-# arquitectura pequeña y dos épocas como máximo. Sus métricas son solo demo.
+# Demo técnica de dos épocas; no se usa para seleccionar configuración.
 demo:
   seed: 919
   batch_size: 2048
@@ -53,10 +137,10 @@ demo:
   patience: 1
   min_delta: 0.0
   config:
-    id: demo32_relu_dropout_adam
+    id: demo32_relu_adam
     hidden_layers: [32]
     activation: relu
-    dropout: 0.1
+    dropout: 0.0
     weight_decay: 0.0
     optimizer: adam
     learning_rate: 0.001
