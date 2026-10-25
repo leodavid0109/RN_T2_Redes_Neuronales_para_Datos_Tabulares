@@ -1,0 +1,18 @@
+# Piloto exploratorio predefinido; se ejecuta solo contra validación.
+device: cpu
+num_threads: 2
+seeds: [2026, 2027]
+initializations: [pytorch, mean_train]
+batch_size: 2048
+max_epochs: 60
+patience: 8
+min_delta: 0.0001
+budget_seconds: 900
+model:
+  id: base32_relu_adam_mse_sigmoid
+  hidden_layers: [32]
+  activation: relu
+  dropout: 0.0
+  weight_decay: 0.0
+  optimizer: adam
+  learning_rate: 0.001

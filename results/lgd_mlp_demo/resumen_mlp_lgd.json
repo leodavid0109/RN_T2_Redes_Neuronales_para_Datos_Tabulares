@@ -1,0 +1,98 @@
+{
+  "modo": "demo_integracion_no_final",
+  "evaluacion": "solo se calcularon métricas de validación; la prueba no intervino en selección",
+  "muestra": "df[df.castigado == True], igual a la muestra usada por Ridge",
+  "filas_castigados": 46009,
+  "filas_por_particion": {
+    "aleatoria": {
+      "entrenamiento": 32168,
+      "validacion": 6913,
+      "prueba": 6928
+    },
+    "temporal": {
+      "entrenamiento": 29255,
+      "validacion": 13981,
+      "prueba": 2773
+    }
+  },
+  "ids_coinciden_con_ridge_en_train_valid_prueba": true,
+  "caracteristicas_transformadas": 99,
+  "columnas_originales_preprocesador": [
+    "loan_amnt",
+    "term_meses",
+    "emp_length_anios",
+    "annual_inc",
+    "dti",
+    "delinq_2yrs",
+    "antiguedad_cred_meses",
+    "inq_last_6mths",
+    "open_acc",
+    "pub_rec",
+    "revol_bal",
+    "revol_util",
+    "total_acc",
+    "acc_now_delinq",
+    "collections_12_mths_ex_med",
+    "mths_since_last_delinq",
+    "mths_since_last_record",
+    "tot_coll_amt",
+    "tot_cur_bal",
+    "total_rev_hi_lim",
+    "falta_mths_since_last_delinq",
+    "falta_mths_since_last_record",
+    "falta_tot_coll_amt",
+    "falta_tot_cur_bal",
+    "falta_total_rev_hi_lim",
+    "home_ownership",
+    "verification_status",
+    "purpose",
+    "addr_state"
+  ],
+  "configuracion": {
+    "id": "demo32_relu_adam",
+    "hidden_layers": [
+      32
+    ],
+    "activation": "relu",
+    "dropout": 0.0,
+    "weight_decay": 0.0,
+    "optimizer": "adam",
+    "learning_rate": 0.001
+  },
+  "loss": "MSE sobre objetivo continuo",
+  "salida": "sigmoid en [0,1]",
+  "semilla": 2026,
+  "max_epocas": 2,
+  "parametros_entrenables": 3233,
+  "tiempo_entrenamiento_sumado_s": 1.2607955999992555,
+  "tiempo_pared_s": 3.496184400002676,
+  "preprocesador_ajustado_con": "entrenamiento_aleatorio",
+  "limitacion_temporal_preprocesador": true,
+  "nota_temporal": "El preprocesador compartido se ajustó con entrenamiento aleatorio; puede haber visto filas temporales de validación/prueba.",
+  "versiones": {
+    "python": "3.12.14",
+    "torch": "2.8.0+cpu",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3"
+  },
+  "hashes_entrada": {
+    "data/processed/pd.parquet": "636d23461ef3306d5629d2ce44825b13277cb04272cf2e32b9be694ee8849a24",
+    "data/processed/lgd.parquet": "f9c46db5a200d2bc3212949a55c8846bd9ab03e062a6aadf7a19bfbf2e1e690b",
+    "models/preprocessor.joblib": "be8a67e93aa423f2c6b542b25ebbc582853cf4bcd9043e098ea9cad7b202a073",
+    "models/lgd_lineal_aleatoria.joblib": "10e81a18e5733427c126b28fb1e4b8511183886ea319187cc9e8d2bbd5c71cd4",
+    "models/lgd_lineal_temporal.joblib": "b046dc5dd7d89c671a9d9e576a159a7a00804a3f74dffe8cc167500477059815",
+    "results/lgd_lineal.csv": "b8c61b85290be46e01fea8ab03abc65d42cbcb2e9077bfebb409a1c3c0d95cd0",
+    "results/lgd_lineal_pred.parquet": "80a17c25a48ce731527dc09f85f110aa72d7c253699456434b302a017f01b709",
+    "results/lgd_lineal_resumen.json": "414efe310edc72f810aa7d7e139a68edcb502f890468db94b47b5c50cf27e450",
+    "results/verificacion_datos_procesados.json": "452a7a224ca606dcf245e5e5817fea18d86562be121034c94de5d7b0f9b7531f",
+    "configs/mlp_lgd.yaml": "3712da9d67940855e7cda966e452318b4bbf08c1aad8c4021ce87386f209ed65",
+    "src/lgd_lineal.py": "aa79a4e904abafbdf36d4c5150d711f270eb879c978363f82d6cc65833dce21a",
+    "src/metricas_lgd.py": "9aa69a497362b16531b5aab3d4c93770e98ed6f5052d0d83e9f3480eacdf8659",
+    "src/mlp_lgd.py": "d785144f3b53dd86ed8e71dddbc17669de1679f5d1600b5c45df107c098d62ba",
+    "scripts/16_entrenar_mlp_lgd.py": "1c383716269716e1e265703249a58596581183a06eb65760b6c2c03d2a9c58ba"
+  },
+  "parametros_entrenables_por_particion": {
+    "aleatoria": 3233,
+    "temporal": 3233
+  }
+}

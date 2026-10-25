@@ -1,0 +1,109 @@
+# Protocolo inicial de Persona B para LGD. El demo utiliza la muestra completa de Ridge.
+device: cpu
+num_threads: 2
+input_features: 99
+output_activation: sigmoid
+loss: mse
+early_stopping_metric: valid_rmse
+selection_metric: validation_rmse_by_partition
+
+demo:
+  seed: 2026
+  batch_size: 2048
+  max_epochs: 2
+  patience: 2
+  min_delta: 0.0001
+  model:
+    id: demo32_relu_adam
+    hidden_layers: [32]
+    activation: relu
+    dropout: 0.0
+    weight_decay: 0.0
+    optimizer: adam
+    learning_rate: 0.001
+
+# Diseño futuro: primero validar cada alternativa con las particiones independientes.
+search:
+  seeds: [2026, 2027]
+  batch_size: 2048
+  max_epochs: 16
+  patience: 4
+  min_delta: 0.0001
+  budget_cpu_minutes: 30
+  candidates:
+    - id: base32_relu_adam
+      changed_from_base: "Base: una capa de 32 unidades, ReLU, Adam, lr 0.001."
+      hidden_layers: [32]
+      activation: relu
+      dropout: 0.0
+      weight_decay: 0.0
+      optimizer: adam
+      learning_rate: 0.001
+    - id: width64
+      changed_from_base: Anchura 32 a 64.
+      hidden_layers: [64]
+      activation: relu
+      dropout: 0.0
+      weight_decay: 0.0
+      optimizer: adam
+      learning_rate: 0.001
+    - id: depth32_16
+      changed_from_base: Profundidad una a dos capas.
+      hidden_layers: [32, 16]
+      activation: relu
+      dropout: 0.0
+      weight_decay: 0.0
+      optimizer: adam
+      learning_rate: 0.001
+    - id: activation_tanh
+      changed_from_base: ReLU a tanh.
+      hidden_layers: [32]
+      activation: tanh
+      dropout: 0.0
+      weight_decay: 0.0
+      optimizer: adam
+      learning_rate: 0.001
+    - id: dropout020
+      changed_from_base: Dropout 0 a 0.20.
+      hidden_layers: [32]
+      activation: relu
+      dropout: 0.2
+      weight_decay: 0.0
+      optimizer: adam
+      learning_rate: 0.001
+    - id: weight_decay_1e4
+      changed_from_base: Weight decay 0 a 1e-4.
+      hidden_layers: [32]
+      activation: relu
+      dropout: 0.0
+      weight_decay: 0.0001
+      optimizer: adam
+      learning_rate: 0.001
+    - id: optimizer_adamw
+      changed_from_base: Adam a AdamW con decay igual a 1e-4; comparar con weight_decay_1e4.
+      hidden_layers: [32]
+      activation: relu
+      dropout: 0.0
+      weight_decay: 0.0001
+      optimizer: adamw
+      learning_rate: 0.001
+    - id: learning_rate_0003
+      changed_from_base: Tasa 0.001 a 0.0003.
+      hidden_layers: [32]
+      activation: relu
+      dropout: 0.0
+      weight_decay: 0.0
+      optimizer: adam
+      learning_rate: 0.0003
+    - id: learning_rate_003
+      changed_from_base: Tasa 0.001 a 0.003.
+      hidden_layers: [32]
+      activation: relu
+      dropout: 0.0
+      weight_decay: 0.0
+      optimizer: adam
+      learning_rate: 0.003
+
+final:
+  seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
+  budget_cpu_minutes: 45

@@ -1,0 +1,84 @@
+{
+  "estado": "extension_exploratoria_no_final_validation_only",
+  "no_se_calcularon_metricas_prueba": true,
+  "motivo": "Dos corridas del piloto agotaron 60 épocas; se repiten desde inicio con máximo 90 porque no se guardó estado Adam.",
+  "configuracion": {
+    "device": "cpu",
+    "num_threads": 2,
+    "seeds": [
+      2026,
+      2027
+    ],
+    "partition": "aleatoria",
+    "initialization": "pytorch",
+    "batch_size": 2048,
+    "max_epochs": 90,
+    "patience": 8,
+    "min_delta": 0.0001,
+    "budget_seconds": 300,
+    "model": {
+      "id": "base32_relu_adam_mse_sigmoid",
+      "hidden_layers": [
+        32
+      ],
+      "activation": "relu",
+      "dropout": 0.0,
+      "weight_decay": 0.0,
+      "optimizer": "adam",
+      "learning_rate": 0.001
+    }
+  },
+  "resultados": [
+    {
+      "particion": "aleatoria",
+      "inicializacion": "pytorch",
+      "semilla": 2026,
+      "epoca_mejor": 62,
+      "epocas_ejecutadas": 62,
+      "motivo_parada": "early_stopping_patience",
+      "parametros_entrenables": 3233,
+      "tiempo_entrenamiento_s": 20.15966549999939,
+      "media_predicha": 0.9290722390426908,
+      "media_observada": 0.9300159779425108,
+      "mae": 0.07273215913796725,
+      "rmse": 0.09484043391259728,
+      "sesgo": -0.0009437388998200196,
+      "r2": 0.012329307519287291
+    },
+    {
+      "particion": "aleatoria",
+      "inicializacion": "pytorch",
+      "semilla": 2027,
+      "epoca_mejor": 70,
+      "epocas_ejecutadas": 70,
+      "motivo_parada": "early_stopping_patience",
+      "parametros_entrenables": 3233,
+      "tiempo_entrenamiento_s": 22.46456500000204,
+      "media_predicha": 0.9294297051950524,
+      "media_observada": 0.9300159779425108,
+      "mae": 0.07221633509290765,
+      "rmse": 0.09461778801384216,
+      "sesgo": -0.0005862727474583466,
+      "r2": 0.016961144428728092
+    }
+  ],
+  "tiempo_entrenamiento_s": 42.62423050000143,
+  "tiempo_pared_s": 44.286022300002514,
+  "budget_seconds": 300,
+  "hashes_entrada": {
+    "data/processed/lgd.parquet": "f9c46db5a200d2bc3212949a55c8846bd9ab03e062a6aadf7a19bfbf2e1e690b",
+    "models/preprocessor.joblib": "be8a67e93aa423f2c6b542b25ebbc582853cf4bcd9043e098ea9cad7b202a073",
+    "results/lgd_lineal.csv": "b8c61b85290be46e01fea8ab03abc65d42cbcb2e9077bfebb409a1c3c0d95cd0",
+    "results/lgd_lineal_pred.parquet": "80a17c25a48ce731527dc09f85f110aa72d7c253699456434b302a017f01b709",
+    "src/mlp_lgd.py": "d0ddbf5c63a606a60797464313d190f676870cf5dbcd54c124af4d38cc420b9e",
+    "scripts/18_extender_convergencia_lgd.py": "c94597f624c8d6fa6f784ee3b00675b34454ca89c00882d68bce1abebaffd30e",
+    "configs/mlp_lgd_convergencia_extension.yaml": "7f7ba60c37d15628f7430676351a79a562059a666721865f1a9fca3e137d2ca9",
+    "docs/mlp_lgd_convergencia.md": "1d3fc181fd22478067d5faf05807b302088e15d280509e099aa2c0f5f36ccdf7"
+  },
+  "versiones": {
+    "python": "3.12.14",
+    "torch": "2.8.0+cpu",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3"
+  }
+}

@@ -106,3 +106,17 @@ python scripts/11_tabla_comparacion_pd.py --mlp results/pd_mlp_final_reproduccio
 ```
 
 En Linux se ejecutan los mismos comandos después de activar `.venv`.
+
+## MLP de LGD (Persona B)
+
+La auditoría de la muestra, sus límites, el baseline Ridge y el protocolo futuro están en [`docs/mlp_lgd.md`](docs/mlp_lgd.md). El demo configurable de dos épocas usa la misma muestra castigada, transformación y máscaras de Ridge; evalúa validación solamente y no es resultado final.
+
+El piloto de convergencia (dos inicializaciones × dos semillas × dos particiones, validación únicamente) y su extensión están en [`docs/mlp_lgd_convergencia.md`](docs/mlp_lgd_convergencia.md). Los resultados canónicos corregidos quedan en `results/lgd_mlp_convergencia_piloto_v2/` y `results/lgd_mlp_convergencia_extension_v2/`; no sustituyen la búsqueda ni las corridas finales.
+
+```powershell
+.\.venv\Scripts\python.exe scripts/16_entrenar_mlp_lgd.py
+```
+
+```bash
+python scripts/16_entrenar_mlp_lgd.py
+```
