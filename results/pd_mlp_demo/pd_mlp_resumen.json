@@ -1,0 +1,92 @@
+{
+  "modo": "demo",
+  "provisional": true,
+  "motivo_provisional": "Demo/búsqueda inicial; preprocesador actual ajustado con entrenamiento aleatorio, que incluye filas de validación/prueba temporal.",
+  "preprocesador_ajustado_con": "entrenamiento_aleatorio",
+  "filas_por_particion": {
+    "aleatoria": {
+      "entrenamiento": 187970,
+      "validacion": 40280,
+      "prueba": 40280
+    },
+    "temporal": {
+      "entrenamiento": 163541,
+      "validacion": 74154,
+      "prueba": 30835
+    }
+  },
+  "columnas_originales_preprocesador": [
+    "loan_amnt",
+    "term_meses",
+    "emp_length_anios",
+    "annual_inc",
+    "dti",
+    "delinq_2yrs",
+    "antiguedad_cred_meses",
+    "inq_last_6mths",
+    "open_acc",
+    "pub_rec",
+    "revol_bal",
+    "revol_util",
+    "total_acc",
+    "acc_now_delinq",
+    "collections_12_mths_ex_med",
+    "mths_since_last_delinq",
+    "mths_since_last_record",
+    "tot_coll_amt",
+    "tot_cur_bal",
+    "total_rev_hi_lim",
+    "falta_mths_since_last_delinq",
+    "falta_mths_since_last_record",
+    "falta_tot_coll_amt",
+    "falta_tot_cur_bal",
+    "falta_total_rev_hi_lim",
+    "home_ownership",
+    "verification_status",
+    "purpose",
+    "addr_state"
+  ],
+  "columnas_transformadas": 99,
+  "probabilidad_reportada": "sigmoid(logit) = P(objetivo=1 = incumplimiento)",
+  "perdida_entrenamiento": "BCEWithLogitsLoss (verosimilitud Bernoulli)",
+  "criterio_parada_temprana": "log-loss no ponderado en validación",
+  "criterio_seleccion": "promedio simple de log-loss de validación aleatoria y temporal; sin consultar prueba",
+  "class_weight": "none",
+  "configuracion_elegida": {
+    "id": "demo32_relu_dropout_adam",
+    "hidden_layers": [
+      32
+    ],
+    "activation": "relu",
+    "dropout": 0.1,
+    "weight_decay": 0.0,
+    "optimizer": "adam",
+    "learning_rate": 0.001
+  },
+  "logloss_validacion_por_particion": null,
+  "logloss_validacion_promedio": null,
+  "configuraciones_entrenadas": 1,
+  "tiempo_total_busqueda_s": 7.134566,
+  "tiempo_total_entrenamiento_final_s": null,
+  "tiempo_total_ejecucion_s": 9.249443,
+  "parametros_entrenables": 3233,
+  "semillas": [
+    919
+  ],
+  "dispositivo": "cpu",
+  "versiones": {
+    "python": "3.12.14",
+    "torch": "2.8.0+cpu",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3"
+  },
+  "hashes_entrada": {
+    "data\\processed\\pd.parquet": "636d23461ef3306d5629d2ce44825b13277cb04272cf2e32b9be694ee8849a24",
+    "models\\preprocessor.joblib": "be8a67e93aa423f2c6b542b25ebbc582853cf4bcd9043e098ea9cad7b202a073",
+    "models\\pd_logreg_aleatoria.joblib": "4b279e0716aeb03b4c050fcfe68c110871abed3e0d16ba6595930c1b9c478131",
+    "models\\pd_logreg_temporal.joblib": "d60b91fafd7ab84141f1e3b63c5fcf1f2423a13c29bb466060835f6a31f6105e",
+    "results\\regresion_logistica_resumen.json": "76056ea34c6945c7f88ce28c110c54929ddfc556e1caabc4d152fe3b2448d545",
+    "results\\verificacion_datos_procesados.json": "452a7a224ca606dcf245e5e5817fea18d86562be121034c94de5d7b0f9b7531f",
+    "configs\\mlp_pd.yaml": "6535a457f64a1bff9877eb8098100143870dfd49fef107711d35be636536b5e9"
+  }
+}

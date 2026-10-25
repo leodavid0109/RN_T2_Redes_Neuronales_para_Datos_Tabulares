@@ -2,8 +2,10 @@
 data/raw/*.csv
 data/raw/*.zip
 
+# Entorno virtual del proyecto (solo la carpeta de la raíz)
+/.venv/
+
 # Python
 __pycache__/
 *.pyc
-.venv/
 .ipynb_checkpoints/

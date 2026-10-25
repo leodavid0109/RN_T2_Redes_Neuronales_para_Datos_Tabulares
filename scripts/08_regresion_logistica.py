@@ -16,6 +16,7 @@ Salidas (results/ y figures/):
 Uso:  python scripts/08_regresion_logistica.py
 """
 import json
+import os
 import platform
 import sys
 import time
@@ -37,6 +38,16 @@ RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 from src.metricas import curva_calibracion, metricas_pd  # noqa: E402
 from src.variables import CATEGORICAS, INDICADOR_FALTANTE  # noqa: E402
+
+
+def _nombre_cpu():
+    """Obtiene nombre de CPU sin asumir que existe /proc/cpuinfo (p. ej., en Windows)."""
+    cpuinfo = Path("/proc/cpuinfo")
+    if cpuinfo.is_file():
+        for linea in cpuinfo.read_text(encoding="utf-8", errors="ignore").splitlines():
+            if linea.lower().startswith("model name") and ":" in linea:
+                return linea.split(":", 1)[1].strip()
+    return platform.processor() or platform.machine() or "desconocido"
 
 # ---------------- Parámetros ----------------
 GRILLA_C = np.logspace(-4, 2, 10)
@@ -115,8 +126,7 @@ resumen.update({
     "grilla_C": [float(c) for c in GRILLA_C], "max_iter": MAX_ITER, "solver": "lbfgs",
     "semillas": "ninguna (modelo determinista; varianza entre semillas = 0)",
     "tiempo_total_busqueda_s": round(t_total, 3),
-    "hardware": {"cpu": [l.split(":")[1].strip() for l in open("/proc/cpuinfo") if l.startswith("model name")][0],
-                 "nucleos": __import__("os").cpu_count(), "so": platform.platform()},
+    "hardware": {"cpu": _nombre_cpu(), "nucleos": os.cpu_count(), "so": platform.platform()},
     "versiones": {"python": sys.version.split()[0], "numpy": np.__version__, "pandas": pd.__version__,
                   "scikit-learn": sklearn.__version__, "scipy": scipy.__version__},
     "columnas_de_entrada": X.shape[1]})

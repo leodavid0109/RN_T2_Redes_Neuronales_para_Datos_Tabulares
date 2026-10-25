@@ -1,0 +1,62 @@
+# Protocolo inicial de Persona B. Todos los experimentos iniciales son sin balanceo.
+device: cpu
+num_threads: 2
+batch_size: 1024
+max_epochs: 40
+patience: 5
+min_delta: 0.0001
+early_stopping_metric: logloss
+selection_metric: mean_validation_logloss
+search_seed: 2026
+final_seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
+class_weight: none
+
+# Variar capacidad, activación, dropout/L2, optimizador y learning rate.
+# Se elige una sola configuración global con el promedio simple del log-loss
+# de validación aleatoria y temporal; nunca se mira el test para escoger.
+search:
+  - id: shallow32_relu_adam
+    hidden_layers: [32]
+    activation: relu
+    dropout: 0.0
+    weight_decay: 0.0001
+    optimizer: adam
+    learning_rate: 0.001
+  - id: deep64_32_relu_dropout_adam
+    hidden_layers: [64, 32]
+    activation: relu
+    dropout: 0.2
+    weight_decay: 0.0
+    optimizer: adam
+    learning_rate: 0.001
+  - id: shallow64_tanh_l2_adamw
+    hidden_layers: [64]
+    activation: tanh
+    dropout: 0.0
+    weight_decay: 0.001
+    optimizer: adamw
+    learning_rate: 0.0005
+  - id: deep32_16_gelu_l2_sgd
+    hidden_layers: [32, 16]
+    activation: gelu
+    dropout: 0.1
+    weight_decay: 0.0001
+    optimizer: sgd
+    learning_rate: 0.01
+
+# Modo de validación de extremo a extremo: mismo dataset y mismos splits, una
+# arquitectura pequeña y dos épocas como máximo. Sus métricas son solo demo.
+demo:
+  seed: 919
+  batch_size: 2048
+  max_epochs: 2
+  patience: 1
+  min_delta: 0.0
+  config:
+    id: demo32_relu_dropout_adam
+    hidden_layers: [32]
+    activation: relu
+    dropout: 0.1
+    weight_decay: 0.0
+    optimizer: adam
+    learning_rate: 0.001
