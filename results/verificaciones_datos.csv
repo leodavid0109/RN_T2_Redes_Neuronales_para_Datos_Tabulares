@@ -1,0 +1,43 @@
+grupo,afirmacion,valor
+faltantes,annual_inc_joint: registros etiquetados con dato (de 268530),3
+faltantes,dti_joint: registros etiquetados con dato (de 268530),3
+faltantes,verification_status_joint: registros etiquetados con dato (de 268530),3
+faltantes,open_acc_6m: registros etiquetados con dato (de 268530),144
+faltantes,open_il_6m: registros etiquetados con dato (de 268530),144
+faltantes,open_il_12m: registros etiquetados con dato (de 268530),144
+faltantes,open_il_24m: registros etiquetados con dato (de 268530),144
+faltantes,mths_since_rcnt_il: registros etiquetados con dato (de 268530),140
+faltantes,total_bal_il: registros etiquetados con dato (de 268530),144
+faltantes,il_util: registros etiquetados con dato (de 268530),126
+faltantes,open_rv_12m: registros etiquetados con dato (de 268530),144
+faltantes,open_rv_24m: registros etiquetados con dato (de 268530),144
+faltantes,max_bal_bc: registros etiquetados con dato (de 268530),144
+faltantes,all_util: registros etiquetados con dato (de 268530),144
+faltantes,inq_fi: registros etiquetados con dato (de 268530),144
+faltantes,total_cu_tl: registros etiquetados con dato (de 268530),144
+faltantes,inq_last_12m: registros etiquetados con dato (de 268530),144
+faltantes,tot_coll_amt: % faltante antes de ago-2012,100.0
+faltantes,tot_coll_amt: % faltante desde ago-2012,2.09
+faltantes,tot_cur_bal: % faltante antes de ago-2012,100.0
+faltantes,tot_cur_bal: % faltante desde ago-2012,2.09
+faltantes,total_rev_hi_lim: % faltante antes de ago-2012,100.0
+faltantes,total_rev_hi_lim: % faltante desde ago-2012,2.09
+faltantes,mths_since_last_major_derog: % faltante antes de ago-2012,100.0
+faltantes,mths_since_last_major_derog: % faltante desde ago-2012,75.15
+redundancia,% de créditos (todos) con funded_amnt == loan_amnt,99.77
+redundancia,% de etiquetados con funded_amnt == loan_amnt,99.29
+posteriores,"% de buenos con total_rec_prncp == funded_amnt (|dif| <= 0,01)",97.31
+posteriores,etiquetados con recoveries > 0,24677
+posteriores,"  de ellos, % que son malos (objetivo = 1)",100.0
+posteriores,buenos (objetivo = 0) con recoveries > 0,0
+tasa y cuota,"% de créditos con |installment - cuota calculada(loan_amnt, int_rate, term)| <= 0,02",99.54
+tasa y cuota,"int_rate medio, grado A (mín–máx)",7.24 (5.32–9.63)
+tasa y cuota,"int_rate medio, grado B (mín–máx)",10.83 (6.00–14.09)
+tasa y cuota,"int_rate medio, grado C (mín–máx)",13.98 (6.00–17.27)
+tasa y cuota,"int_rate medio, grado D (mín–máx)",17.18 (6.00–20.31)
+tasa y cuota,"int_rate medio, grado E (mín–máx)",19.90 (6.00–23.40)
+tasa y cuota,"int_rate medio, grado F (mín–máx)",23.58 (6.00–26.06)
+tasa y cuota,"int_rate medio, grado G (mín–máx)",25.63 (16.59–28.99)
+constantes,policy_code: valores distintos en etiquetados,[1.0]
+constantes,application_type: conteo en etiquetados,"{'INDIVIDUAL': 268527, 'JOINT': 3}"
+constantes,pymnt_plan: conteo en etiquetados,"{'n': 268524, 'y': 6}"

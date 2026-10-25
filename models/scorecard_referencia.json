@@ -1,0 +1,30 @@
+{
+  "medias_contribucion": {
+    "loan_amnt": 3.435342013399899e-16,
+    "term": 5.32236086583083e-16,
+    "emp_length": -7.862578551795544e-18,
+    "annual_inc": 4.620776933516765e-16,
+    "dti": -5.902982051194193e-16,
+    "delinq_2yrs": 8.709317780450448e-17,
+    "earliest_cr_line": 2.69142111965309e-17,
+    "inq_last_6mths": -1.9354039512112108e-17,
+    "open_acc": -4.935280075588588e-16,
+    "pub_rec": 9.677019756056054e-18,
+    "revol_bal": 4.052252022848473e-17,
+    "revol_util": 3.8708079024224215e-17,
+    "total_acc": -2.516025136574574e-16,
+    "acc_now_delinq": 3.4776789748326445e-18,
+    "collections_12_mths_ex_med": 1.9354039512112108e-17,
+    "mths_since_last_delinq": -4.475621637175925e-17,
+    "mths_since_last_record": -6.0481373475350336e-18,
+    "tot_coll_amt": -9.677019756056054e-18,
+    "tot_cur_bal": 2.709565531695695e-16,
+    "total_rev_hi_lim": -2.2740996426731727e-16,
+    "home_ownership": 7.424419540238765,
+    "verification_status": 6.866747469483749,
+    "purpose": 6.756291936083204,
+    "addr_state": -0.6442767996787417
+  },
+  "puntaje_promedio": 527.9908347604779,
+  "n_referencia": 187970
+}

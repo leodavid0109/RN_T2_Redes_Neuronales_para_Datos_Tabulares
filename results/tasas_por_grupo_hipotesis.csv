@@ -1,0 +1,33 @@
+hipotesis,variable,grupo,rango,n,malos,tasa_pct
+H1,dti,Q1,"0 a 9,58",37597,5853,15.57
+H1,dti,Q2,"9,58 a 14,2",37678,6808,18.07
+H1,dti,Q3,"14,2 a 18,53",37511,7802,20.8
+H1,dti,Q4,"18,53 a 23,6",37611,9001,23.93
+H1,dti,Q5,"23,6 a 57,14",37573,11709,31.16
+H2,term,36 meses,,144821,26164,18.07
+H2,term,60 meses,,43149,15009,34.78
+H3,revol_util,Q1,"0 a 31,7",37694,5777,15.33
+H3,revol_util,Q2,"31,7 a 48,7",37461,7493,20.0
+H3,revol_util,Q3,"48,7 a 63,1",37778,8536,22.6
+H3,revol_util,Q4,"63,1 a 78,1",37521,9246,24.64
+H3,revol_util,Q5,"78,1 a 892",37338,10079,26.99
+H4,delinq_2yrs,0,,157194,33612,21.38
+H4,delinq_2yrs,1 o más,,30755,7559,24.58
+H5,inq_last_6mths,0,,91095,18126,19.9
+H5,inq_last_6mths,1,,53683,12154,22.64
+H5,inq_last_6mths,2,,25748,6238,24.23
+H5,inq_last_6mths,3 o más,,17423,4653,26.71
+H6,annual_inc,Q1,1.896 a 41.000,38279,10426,27.24
+H6,annual_inc,Q2,41.000 a 55.000,39659,9526,24.02
+H6,annual_inc,Q3,55.000 a 70.000,35839,7936,22.14
+H6,annual_inc,Q4,70.000 a 95.000,37654,7180,19.07
+H6,annual_inc,Q5,95.000 a 8.706.582,36538,6105,16.71
+H7,antiguedad_cred_meses,Q1,6 a 116,37724,8831,23.41
+H7,antiguedad_cred_meses,Q2,116 a 151,37819,8488,22.44
+H7,antiguedad_cred_meses,Q3,151 a 186,37718,8270,21.93
+H7,antiguedad_cred_meses,Q4,186 a 242,37499,7845,20.92
+H7,antiguedad_cred_meses,Q5,242 a 793,37189,7737,20.8
+H8,home_ownership,MORTGAGE,,92067,18051,19.61
+H8,home_ownership,OWN,,16434,3810,23.18
+H8,home_ownership,Otras,,173,39,22.54
+H8,home_ownership,RENT,,79296,19273,24.31

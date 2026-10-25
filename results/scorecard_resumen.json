@@ -1,0 +1,35 @@
+{
+  "puntaje_base": 600,
+  "odds_base": 50,
+  "pd_en_odds_base": 0.0196078431372549,
+  "pdo": 20,
+  "factor": 28.85390081777927,
+  "offset": 487.1228762045055,
+  "modelo": "models/pd_logreg_aleatoria.joblib",
+  "poblacion_referencia": "split_random = entrenamiento",
+  "n_referencia": 187970,
+  "puntaje_promedio": 527.9908347604779,
+  "puntaje_referencia": {
+    "min": 319.00556872816355,
+    "p5": 491.8235600851649,
+    "p25": 513.8737960637637,
+    "mediana": 528.220659014203,
+    "p75": 541.9555534039096,
+    "p95": 562.6531344099706,
+    "max": 1733.4252544662934,
+    "desv_est": 22.316711387033596
+  },
+  "auc_puntaje_prueba_aleatoria": 0.6917754822206181,
+  "tasa_malos_monotona_por_decil": {
+    "validacion": true,
+    "prueba": true
+  },
+  "puntos_por_odds_x2_verificado": true,
+  "rango_mostrado": [
+    300,
+    850
+  ],
+  "creditos_acotados_por_debajo": 0,
+  "creditos_acotados_por_encima": 10,
+  "creditos_total": 268530
+}

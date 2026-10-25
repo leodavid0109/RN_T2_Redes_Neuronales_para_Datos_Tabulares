@@ -1,0 +1,4 @@
+conjunto,registros,malos,pct_del_total,tasa_incumplimiento_pct
+entrenamiento (hasta 2013),163541,31527,60.9,19.3
+validación (2014),74154,19441,27.6,26.2
+prueba (2015),30835,7851,11.5,25.5

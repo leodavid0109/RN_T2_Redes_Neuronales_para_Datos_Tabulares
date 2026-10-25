@@ -1,0 +1,17 @@
+tarea,modelo,particion,conjunto,configuraciones_entrenadas,tiempo_total_s,parametros_entrenables,semillas,metrica,media,desv_est,mejor,peor
+PD,Regresión logística,aleatoria,validacion,10,19.12,100,0 (determinista),auc,0.6908152455259786,0.0,0.6908152455259786,0.6908152455259786
+PD,Regresión logística,aleatoria,validacion,10,19.12,100,0 (determinista),gini,0.3816304910519572,0.0,0.3816304910519572,0.3816304910519572
+PD,Regresión logística,aleatoria,validacion,10,19.12,100,0 (determinista),ks,0.2799923613138333,0.0,0.2799923613138333,0.2799923613138333
+PD,Regresión logística,aleatoria,validacion,10,19.12,100,0 (determinista),brier,0.1577027582799908,0.0,0.1577027582799908,0.1577027582799908
+PD,Regresión logística,aleatoria,prueba,10,19.12,100,0 (determinista),auc,0.6917754822206181,0.0,0.6917754822206181,0.6917754822206181
+PD,Regresión logística,aleatoria,prueba,10,19.12,100,0 (determinista),gini,0.3835509644412362,0.0,0.3835509644412362,0.3835509644412362
+PD,Regresión logística,aleatoria,prueba,10,19.12,100,0 (determinista),ks,0.2822679265281672,0.0,0.2822679265281672,0.2822679265281672
+PD,Regresión logística,aleatoria,prueba,10,19.12,100,0 (determinista),brier,0.1571990205503913,0.0,0.1571990205503913,0.1571990205503913
+PD,Regresión logística,temporal,validacion,10,16.339,100,0 (determinista),auc,0.682432573395723,0.0,0.682432573395723,0.682432573395723
+PD,Regresión logística,temporal,validacion,10,16.339,100,0 (determinista),gini,0.3648651467914461,0.0,0.3648651467914461,0.3648651467914461
+PD,Regresión logística,temporal,validacion,10,16.339,100,0 (determinista),ks,0.2691005245770305,0.0,0.2691005245770305,0.2691005245770305
+PD,Regresión logística,temporal,validacion,10,16.339,100,0 (determinista),brier,0.1793902700333648,0.0,0.1793902700333648,0.1793902700333648
+PD,Regresión logística,temporal,prueba,10,16.339,100,0 (determinista),auc,0.674874882087512,0.0,0.674874882087512,0.674874882087512
+PD,Regresión logística,temporal,prueba,10,16.339,100,0 (determinista),gini,0.349749764175024,0.0,0.349749764175024,0.349749764175024
+PD,Regresión logística,temporal,prueba,10,16.339,100,0 (determinista),ks,0.2582381632088388,0.0,0.2582381632088388,0.2582381632088388
+PD,Regresión logística,temporal,prueba,10,16.339,100,0 (determinista),brier,0.1773334128079619,0.0,0.1773334128079619,0.1773334128079619

@@ -1,0 +1,14 @@
+# Parámetros de la scorecard de PD (decididos el 23 oct 2026).
+# Si se unifica la configuración del proyecto, este bloque pasa tal cual al archivo común.
+scorecard:
+  puntaje_base: 600        # puntaje asignado a las odds de referencia
+  odds_base: 50            # odds = P(bueno)/P(malo): 50 buenos por cada malo (PD = 1/51 ≈ 1,96 %)
+  pdo: 20                  # puntos para duplicar las odds
+  modelo: models/pd_logreg_aleatoria.joblib
+  preprocesador: models/preprocessor.joblib
+  columna_particion: split_random
+  conjunto_referencia: entrenamiento   # población con la que se calculan percentiles
+  # Solo para mostrar: el puntaje se acota a este rango (el modelo es lineal y extrapola con ingresos extremos).
+  # El puntaje sin acotar se conserva para evaluar el modelo y para los percentiles.
+  puntaje_minimo: 300
+  puntaje_maximo: 850

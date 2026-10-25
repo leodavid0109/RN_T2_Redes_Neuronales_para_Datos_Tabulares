@@ -1,0 +1,9 @@
+hipotesis,variable,signo_esperado,coef_aleatoria,coef_temporal,coincide
+H1,dti,+,0.224,0.144,Sí
+H2,term,+,0.327,0.39,Sí
+H3,revol_util,+,0.219,0.233,Sí
+H4,delinq_2yrs,+,0.052,0.05,Sí
+H5,inq_last_6mths,+,0.175,0.188,Sí
+H6,annual_inc,-,-0.283,-0.389,Sí
+H7,antiguedad_cred_meses,-,-0.011,-0.007,"Sí, casi nulo"
+H8,home_ownership (RENT menos MORTGAGE),+,0.206,0.151,Sí

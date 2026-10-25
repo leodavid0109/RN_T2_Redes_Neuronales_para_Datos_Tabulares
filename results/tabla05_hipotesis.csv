@@ -1,0 +1,9 @@
+hipotesis,variable,hipotesis_texto,criterio
+H1,dti,"A mayor razón deuda/ingreso, mayor probabilidad de incumplimiento",Confirmada: diferencia >= 2 pp en la dirección esperada y p < 0.01
+H2,term,Los créditos a 60 meses incumplen más que los de 36 meses,Confirmada: diferencia >= 2 pp en la dirección esperada y p < 0.01
+H3,revol_util,"A mayor utilización del crédito rotativo, mayor riesgo",Confirmada: diferencia >= 2 pp en la dirección esperada y p < 0.01
+H4,delinq_2yrs,Quien tuvo moras de 30 o más días en los últimos 2 años incumple más,Confirmada: diferencia >= 2 pp en la dirección esperada y p < 0.01
+H5,inq_last_6mths,"A más consultas de crédito recientes, mayor riesgo",Confirmada: diferencia >= 2 pp en la dirección esperada y p < 0.01
+H6,annual_inc,"A mayor ingreso anual, menor riesgo",Confirmada: diferencia >= 2 pp en la dirección esperada y p < 0.01
+H7,antiguedad_cred_meses,"A mayor antigüedad crediticia, menor riesgo",Confirmada: diferencia >= 2 pp en la dirección esperada y p < 0.01
+H8,home_ownership,Quien alquila su vivienda incumple más que quien tiene hipoteca,Confirmada: diferencia >= 2 pp en la dirección esperada y p < 0.01
