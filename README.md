@@ -6,6 +6,8 @@ El entorno se fija con **Python 3.12.14** y las versiones de `requirements.txt`.
 
 PyTorch está fijado a la distribución **CPU** (`2.8.0+cpu`). El equipo de desarrollo observado usa un AMD Ryzen 7 5700G y no se encontró evidencia de una GPU NVIDIA/CUDA configurada. La instalación no depende de CUDA ni de ROCm. Si el equipo decide usar GPU, debe acordar y documentar otra distribución antes de cambiar el entorno.
 
+La integración de LGD y pérdida esperada usa NumPy, pandas, SciPy, scikit-learn, pyarrow, joblib y matplotlib, ya incluidos en este conjunto fijo; no requiere paquetes adicionales. Se conservan las versiones verificadas con los artefactos existentes en lugar de cambiar el entorno al resolver el `requirements.txt` de ambos frentes.
+
 No hay todavía código de aplicación web, por lo que no se agregan dependencias de interfaz. `pytest` tampoco es necesario para la prueba actual: `tests/test_scorecard.py` puede ejecutarse directamente con Python.
 
 ### Windows (PowerShell)
