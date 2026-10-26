@@ -1,0 +1,351 @@
+{
+  "mode": "search",
+  "status": "exploratory_search_validation_only_no_final_30_seeds",
+  "test_metrics_calculated": false,
+  "test_used_for_selection": false,
+  "id_match_ridge_all_sets": {
+    "aleatoria": {
+      "entrenamiento": {
+        "n": 32168,
+        "coincide_con_ridge": true
+      },
+      "validacion": {
+        "n": 6913,
+        "coincide_con_ridge": true
+      },
+      "prueba": {
+        "n": 6928,
+        "coincide_con_ridge": true
+      }
+    },
+    "temporal": {
+      "entrenamiento": {
+        "n": 29255,
+        "coincide_con_ridge": true
+      },
+      "validacion": {
+        "n": 13981,
+        "coincide_con_ridge": true
+      },
+      "prueba": {
+        "n": 2773,
+        "coincide_con_ridge": true
+      }
+    }
+  },
+  "sample": "lgd.parquet filtrado castigado=True, preprocessor.joblib existente, 99 características; mismas máscaras que Ridge",
+  "config": {
+    "device": "cpu",
+    "num_threads": 2,
+    "input_features": 99,
+    "output_activation": "sigmoid",
+    "loss": "mse",
+    "early_stopping_metric": "valid_rmse",
+    "selection_metric": "validation_rmse_by_partition",
+    "demo": {
+      "seed": 2026,
+      "batch_size": 2048,
+      "max_epochs": 2,
+      "patience": 2,
+      "min_delta": 0.0001,
+      "model": {
+        "id": "demo32_relu_adam",
+        "hidden_layers": [
+          32
+        ],
+        "activation": "relu",
+        "dropout": 0.0,
+        "weight_decay": 0.0,
+        "optimizer": "adam",
+        "learning_rate": 0.001
+      }
+    },
+    "search": {
+      "seeds": [
+        2026,
+        2027
+      ],
+      "batch_size": 2048,
+      "max_epochs": 100,
+      "patience": 12,
+      "min_delta": 1e-05,
+      "budget_cpu_minutes": 30,
+      "selection_metric": "mean_validation_rmse_per_partition",
+      "candidates": [
+        {
+          "id": "base32_relu_adam",
+          "changed_from_base": "Base: una capa de 32 unidades, ReLU, Adam, lr 0.001.",
+          "hypothesis": "Referencia interna; inicializar en la media de entrenamiento puede acelerar la convergencia sin alterar los datos usados.",
+          "output_initialization": "mean_train",
+          "hidden_layers": [
+            32
+          ],
+          "activation": "relu",
+          "dropout": 0.0,
+          "weight_decay": 0.0,
+          "optimizer": "adam",
+          "learning_rate": 0.001
+        },
+        {
+          "id": "width64",
+          "changed_from_base": "Anchura 32 a 64.",
+          "hypothesis": "Más unidades pueden capturar no linealidades adicionales; aumentan parámetros y riesgo de sobreajuste.",
+          "output_initialization": "mean_train",
+          "hidden_layers": [
+            64
+          ],
+          "activation": "relu",
+          "dropout": 0.0,
+          "weight_decay": 0.0,
+          "optimizer": "adam",
+          "learning_rate": 0.001
+        },
+        {
+          "id": "depth32_16",
+          "changed_from_base": "Profundidad una a dos capas.",
+          "hypothesis": "Una segunda capa puede representar interacciones jerárquicas; también puede dificultar el ajuste.",
+          "output_initialization": "mean_train",
+          "hidden_layers": [
+            32,
+            16
+          ],
+          "activation": "relu",
+          "dropout": 0.0,
+          "weight_decay": 0.0,
+          "optimizer": "adam",
+          "learning_rate": 0.001
+        },
+        {
+          "id": "activation_tanh",
+          "changed_from_base": "ReLU a tanh.",
+          "hypothesis": "Tanh puede ayudar con señales centradas/escaladas; puede saturarse y frenar gradientes.",
+          "output_initialization": "mean_train",
+          "hidden_layers": [
+            32
+          ],
+          "activation": "tanh",
+          "dropout": 0.0,
+          "weight_decay": 0.0,
+          "optimizer": "adam",
+          "learning_rate": 0.001
+        },
+        {
+          "id": "dropout020",
+          "changed_from_base": "Dropout 0 a 0.20.",
+          "hypothesis": "Dropout puede reducir sobreajuste en entradas correlacionadas, a costa de ruido de optimización.",
+          "output_initialization": "mean_train",
+          "hidden_layers": [
+            32
+          ],
+          "activation": "relu",
+          "dropout": 0.2,
+          "weight_decay": 0.0,
+          "optimizer": "adam",
+          "learning_rate": 0.001
+        },
+        {
+          "id": "weight_decay_1e4",
+          "changed_from_base": "Weight decay 0 a 1e-4.",
+          "hypothesis": "Regularización L2 puede reducir coeficientes excesivos y mejorar generalización.",
+          "output_initialization": "mean_train",
+          "hidden_layers": [
+            32
+          ],
+          "activation": "relu",
+          "dropout": 0.0,
+          "weight_decay": 0.0001,
+          "optimizer": "adam",
+          "learning_rate": 0.001
+        },
+        {
+          "id": "optimizer_adamw",
+          "changed_from_base": "Adam a AdamW con decay igual a 1e-4; comparar con weight_decay_1e4.",
+          "hypothesis": "AdamW separa el decaimiento de pesos de la adaptación de Adam; se compara con Adam usando igual decay.",
+          "output_initialization": "mean_train",
+          "hidden_layers": [
+            32
+          ],
+          "activation": "relu",
+          "dropout": 0.0,
+          "weight_decay": 0.0001,
+          "optimizer": "adamw",
+          "learning_rate": 0.001
+        },
+        {
+          "id": "learning_rate_0003",
+          "changed_from_base": "Tasa 0.001 a 0.0003.",
+          "hypothesis": "Una tasa menor puede mejorar el refinamiento, aunque requiere más épocas.",
+          "output_initialization": "mean_train",
+          "hidden_layers": [
+            32
+          ],
+          "activation": "relu",
+          "dropout": 0.0,
+          "weight_decay": 0.0,
+          "optimizer": "adam",
+          "learning_rate": 0.0003
+        },
+        {
+          "id": "learning_rate_003",
+          "changed_from_base": "Tasa 0.001 a 0.003.",
+          "hypothesis": "Una tasa mayor puede llegar rápido a una región útil o hacer inestable el entrenamiento.",
+          "output_initialization": "mean_train",
+          "hidden_layers": [
+            32
+          ],
+          "activation": "relu",
+          "dropout": 0.0,
+          "weight_decay": 0.0,
+          "optimizer": "adam",
+          "learning_rate": 0.003
+        },
+        {
+          "id": "base32_relu_adam_pytorch_init",
+          "changed_from_base": "Solo cambia la inicialización de salida respecto de base32_relu_adam: media train a inicialización PyTorch.",
+          "hypothesis": "Contraste emparejado para comprobar si la mejora/velocidad del piloto se debe a iniciar con salida constante.",
+          "output_initialization": "pytorch",
+          "hidden_layers": [
+            32
+          ],
+          "activation": "relu",
+          "dropout": 0.0,
+          "weight_decay": 0.0,
+          "optimizer": "adam",
+          "learning_rate": 0.001
+        }
+      ]
+    },
+    "final": {
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "budget_cpu_minutes": 45
+    }
+  },
+  "candidate_count": 10,
+  "run_count": 40,
+  "selected_per_partition": {
+    "aleatoria": {
+      "configuracion": "base32_relu_adam",
+      "rmse_validacion_medio": 0.09432450738508248,
+      "criterio": "menor media de RMSE de validación entre dos semillas; partición independiente"
+    },
+    "temporal": {
+      "configuracion": "learning_rate_003",
+      "rmse_validacion_medio": 0.08546140262076912,
+      "criterio": "menor media de RMSE de validación entre dos semillas; partición independiente"
+    }
+  },
+  "stop_counts": [
+    {
+      "particion": "aleatoria",
+      "motivo_parada": "early_stopping_patience",
+      "corridas": 18
+    },
+    {
+      "particion": "aleatoria",
+      "motivo_parada": "max_epochs_reached",
+      "corridas": 2
+    },
+    {
+      "particion": "temporal",
+      "motivo_parada": "early_stopping_patience",
+      "corridas": 20
+    }
+  ],
+  "training_seconds_total": 510.73956050000925,
+  "wall_seconds_total": 515.347815000001,
+  "cpu_budget_seconds": 1800,
+  "preprocessor_basis": "entrenamiento_aleatorio",
+  "temporal_preprocessor_limitation": "El preprocesador compartido fue ajustado con entrenamiento aleatorio; pudo incorporar filas temporales de validación/prueba. El resultado temporal conserva esta limitación.",
+  "versions": {
+    "python": "3.12.14",
+    "torch": "2.8.0+cpu",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "scikit_learn": "1.7.2"
+  },
+  "input_hashes": {
+    "data/processed/lgd.parquet": "f9c46db5a200d2bc3212949a55c8846bd9ab03e062a6aadf7a19bfbf2e1e690b",
+    "models/preprocessor.joblib": "be8a67e93aa423f2c6b542b25ebbc582853cf4bcd9043e098ea9cad7b202a073",
+    "results/lgd_lineal.csv": "b8c61b85290be46e01fea8ab03abc65d42cbcb2e9077bfebb409a1c3c0d95cd0",
+    "results/lgd_lineal_pred.parquet": "80a17c25a48ce731527dc09f85f110aa72d7c253699456434b302a017f01b709",
+    "results/lgd_lineal_resumen.json": "414efe310edc72f810aa7d7e139a68edcb502f890468db94b47b5c50cf27e450",
+    "results/verificacion_datos_procesados.json": "452a7a224ca606dcf245e5e5817fea18d86562be121034c94de5d7b0f9b7531f",
+    "configs/mlp_lgd.yaml": "3d799af3c1125a8c16e42ef982c47e6d5cf066b124a7bee0a7d20fc80548a684",
+    "src/mlp_lgd.py": "d0ddbf5c63a606a60797464313d190f676870cf5dbcd54c124af4d38cc420b9e",
+    "src/metricas_lgd.py": "9aa69a497362b16531b5aab3d4c93770e98ed6f5052d0d83e9f3480eacdf8659",
+    "scripts/19_buscar_mlp_lgd.py": "928a4307732153a226b68bb0964aa0658d565d1ace96ba59afe126b2c6b89299"
+  },
+  "checkpoint_hashes": {
+    "aleatoria_activation_tanh_seed_2026.pt": "50cda0cc4c6391681b3e7245647cf2606ca4bbbdf35ca333a7615d472a99ad4f",
+    "aleatoria_activation_tanh_seed_2027.pt": "b4959907fa49263162c5c99b054fa3f4e79a71f11f2ad76fd425d40904025de5",
+    "aleatoria_base32_relu_adam_pytorch_init_seed_2026.pt": "f47670133dea0f6b169bc38b76f441f287c39f9257e925c7b1c699256f94f195",
+    "aleatoria_base32_relu_adam_pytorch_init_seed_2027.pt": "7a723927831d4589624ed7b408adcc8aad4901ab02271fe56b829a1278abc397",
+    "aleatoria_base32_relu_adam_seed_2026.pt": "a8588eea6cb83540e29f70621b76300266d012d4822a427f33022606b24453fb",
+    "aleatoria_base32_relu_adam_seed_2027.pt": "321b86ee6ee9ff02d785e184568969f84d1dfc69ee701dc4530dcea6314c79db",
+    "aleatoria_depth32_16_seed_2026.pt": "84429f5ee69d6a7661e0e621a8cb1bbff94f488135d7172462cf89b3f5e9b0ee",
+    "aleatoria_depth32_16_seed_2027.pt": "db16ce972b2dd0d981f9098ee5fe9bae4c71d9d80f05eddc525a9b7d327e0d8a",
+    "aleatoria_dropout020_seed_2026.pt": "bef08f895999f756ddbb64b6c7cc942ee683299719abb175fc15242b64d664ce",
+    "aleatoria_dropout020_seed_2027.pt": "a967c22f1ff321b4577fa648131e05355cd45f8d20edc8e349298da66323ca0c",
+    "aleatoria_learning_rate_0003_seed_2026.pt": "9452728f70c055c6214a1ad1e1a1d675e25e6280e23c6512619788e20c0d3c76",
+    "aleatoria_learning_rate_0003_seed_2027.pt": "cc8703b264309a99b8179c65ae1144cad4bb3e9637cbdf8a6a74e13d8d5a4f40",
+    "aleatoria_learning_rate_003_seed_2026.pt": "b94f73aa3496a213402e0a855abd014ac34d94917e6f017f0b672dcc5fabf52f",
+    "aleatoria_learning_rate_003_seed_2027.pt": "d55b84bc614e37a003f34946775eab9df468bfcdce5b8fa3f5897a84c5894d4c",
+    "aleatoria_optimizer_adamw_seed_2026.pt": "c5fa8e88168a2f6c1e309164bdcb25b016597bc745fd0bf5fd123ea4a0bb88e0",
+    "aleatoria_optimizer_adamw_seed_2027.pt": "c1f0111ad3c416e47a82f09427f4c494a61caad52b199547d75baa9f90c6d013",
+    "aleatoria_weight_decay_1e4_seed_2026.pt": "1c46b3d85931ca3c8ceea095d48c4107ebe9fba9b4950658135899cc29189650",
+    "aleatoria_weight_decay_1e4_seed_2027.pt": "7d7a852e2e5bb8b89257ebc73c3ba9471811c98c5e0c819505839f97a77934d8",
+    "aleatoria_width64_seed_2026.pt": "b4584ee4b4bd1941096dbccf851e8e3f5da18dbdabffe0e464e9491d36b15ef2",
+    "aleatoria_width64_seed_2027.pt": "cd9865b898080e88c16534accf7438cf665e101baa8a58712fae121ef21a8367",
+    "temporal_activation_tanh_seed_2026.pt": "c58ddd03682283eb9b2422f9cf848ed8c60e540719d034e6c3d3e10138c76d5d",
+    "temporal_activation_tanh_seed_2027.pt": "2fe5273d5b9ee5ad747707dfaada748253a64b5639e85266f8d4dccd3174bb71",
+    "temporal_base32_relu_adam_pytorch_init_seed_2026.pt": "9e5473ff1140e335733f69cb9131038dccb0654cc1e68d54bbe1c4336c7ae147",
+    "temporal_base32_relu_adam_pytorch_init_seed_2027.pt": "baed5b87386aeee45ef0ceeb7275bfa114a04adf82723f4f4b8419531f62e218",
+    "temporal_base32_relu_adam_seed_2026.pt": "67db5b71681b61b430e2331876c28d8296a53e8c7f78e22bedeb6ac7f3b06cd7",
+    "temporal_base32_relu_adam_seed_2027.pt": "bae0b57f2972d956b9314e2c5a92f69684d82e14b97e71dde158565d38a7f166",
+    "temporal_depth32_16_seed_2026.pt": "86b6cdc8deb48a47feee6b2a2cd3904d2045be868e9a52603b8d5e172d4c9757",
+    "temporal_depth32_16_seed_2027.pt": "d14857eca7960db0723d2f1966d14102d505bfa732650690708db59e983ede41",
+    "temporal_dropout020_seed_2026.pt": "b29fe5b69cc0743dcbcd8dfe9ae09d823692bcf988d2568d65cf97bedbdfe43b",
+    "temporal_dropout020_seed_2027.pt": "fedb8751984edc64c438d18e2a34dd6942ffb696f3a6640c5183982264e6f8bd",
+    "temporal_learning_rate_0003_seed_2026.pt": "5020a122a9452707a1218e21c82bc0110e560577872d2610746fcfc2e9c31b3a",
+    "temporal_learning_rate_0003_seed_2027.pt": "863f610bcfcee2ecc7c1c8d9c9c5080876923cd0b7f88c0bf349c1fa390d3b08",
+    "temporal_learning_rate_003_seed_2026.pt": "f2b39b83f43d59bf979ba2ca4d5124afb331c8c78dfbcfb371ae0fff6b16faef",
+    "temporal_learning_rate_003_seed_2027.pt": "93f4676229ddaad5a4c6b5a59b200fcc13f664df20826c9ff07b8f1c9042a367",
+    "temporal_optimizer_adamw_seed_2026.pt": "719d060e950ed77346ffbc48aba7062802c2c705e09bda5765c9bbf3f76fca8d",
+    "temporal_optimizer_adamw_seed_2027.pt": "c91e46a79f82499162cb043fa8848c090873e97a40b8977c92e4ee05bbfea0ae",
+    "temporal_weight_decay_1e4_seed_2026.pt": "02dc2935ec82a132671b847a4b832b432eddea3cb900ecb9d8bd8213cd31287f",
+    "temporal_weight_decay_1e4_seed_2027.pt": "14834e85dbfb79368f078ba3c19c0d247ab9007d5c570126a99b9d1f8379a0ab",
+    "temporal_width64_seed_2026.pt": "ec705b14618e9b085559f5d346938c92da762918e00b63bfd9d3d8b76249bded",
+    "temporal_width64_seed_2027.pt": "5c36af7a32cc0357001f9df6981012f51fcdc461d79e7f2073227136e1b91370"
+  }
+}

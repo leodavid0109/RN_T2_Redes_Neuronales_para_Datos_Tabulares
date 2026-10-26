@@ -1,0 +1,90 @@
+{
+  "status": "validation_only_extension_no_final",
+  "metrics_test_calculated": false,
+  "reason": "Las dos semillas base con inicialización PyTorch alcanzaron la época máxima 100; repetidas desde inicio con máximo 160.",
+  "config": {
+    "device": "cpu",
+    "num_threads": 2,
+    "candidate_id": "base32_relu_adam_pytorch_init",
+    "partition": "aleatoria",
+    "seeds": [
+      2026,
+      2027
+    ],
+    "batch_size": 2048,
+    "max_epochs": 160,
+    "patience": 12,
+    "min_delta": 1e-05,
+    "budget_cpu_minutes": 5
+  },
+  "candidate": {
+    "id": "base32_relu_adam_pytorch_init",
+    "changed_from_base": "Solo cambia la inicialización de salida respecto de base32_relu_adam: media train a inicialización PyTorch.",
+    "hypothesis": "Contraste emparejado para comprobar si la mejora/velocidad del piloto se debe a iniciar con salida constante.",
+    "output_initialization": "pytorch",
+    "hidden_layers": [
+      32
+    ],
+    "activation": "relu",
+    "dropout": 0.0,
+    "weight_decay": 0.0,
+    "optimizer": "adam",
+    "learning_rate": 0.001
+  },
+  "results": [
+    {
+      "configuracion": "base32_relu_adam_pytorch_init",
+      "particion": "aleatoria",
+      "semilla": 2026,
+      "inicializacion": "pytorch",
+      "epoca_mejor": 133,
+      "epocas_ejecutadas": 133,
+      "motivo_parada": "early_stopping_patience",
+      "parametros_entrenables": 3233,
+      "tiempo_entrenamiento_s": 47.77048219999779,
+      "media_predicha": 0.9285747283242743,
+      "media_observada": 0.9300159779425108,
+      "mae": 0.07251792719770095,
+      "rmse": 0.09458359655068355,
+      "sesgo": -0.001441249618236432,
+      "r2": 0.017671485782491225
+    },
+    {
+      "configuracion": "base32_relu_adam_pytorch_init",
+      "particion": "aleatoria",
+      "semilla": 2027,
+      "inicializacion": "pytorch",
+      "epoca_mejor": 143,
+      "epocas_ejecutadas": 153,
+      "motivo_parada": "early_stopping_patience",
+      "parametros_entrenables": 3233,
+      "tiempo_entrenamiento_s": 55.148169100000814,
+      "media_predicha": 0.9288702551197354,
+      "media_observada": 0.9300159779425108,
+      "mae": 0.07218588747458125,
+      "rmse": 0.09437912834540271,
+      "sesgo": -0.0011457228227753585,
+      "r2": 0.021914036378510193
+    }
+  ],
+  "training_seconds": 102.9186512999986,
+  "wall_seconds": 105.11396210000021,
+  "input_hashes": {
+    "data/processed/lgd.parquet": "f9c46db5a200d2bc3212949a55c8846bd9ab03e062a6aadf7a19bfbf2e1e690b",
+    "models/preprocessor.joblib": "be8a67e93aa423f2c6b542b25ebbc582853cf4bcd9043e098ea9cad7b202a073",
+    "results/lgd_lineal.csv": "b8c61b85290be46e01fea8ab03abc65d42cbcb2e9077bfebb409a1c3c0d95cd0",
+    "results/lgd_lineal_pred.parquet": "80a17c25a48ce731527dc09f85f110aa72d7c253699456434b302a017f01b709",
+    "configs/mlp_lgd.yaml": "3d799af3c1125a8c16e42ef982c47e6d5cf066b124a7bee0a7d20fc80548a684",
+    "configs/mlp_lgd_search_extension.yaml": "c841bc38d86c71d90fd83707cf174320a76922df4f15e84dfb9f3268fab4daad",
+    "src/mlp_lgd.py": "d0ddbf5c63a606a60797464313d190f676870cf5dbcd54c124af4d38cc420b9e",
+    "scripts/19_buscar_mlp_lgd.py": "928a4307732153a226b68bb0964aa0658d565d1ace96ba59afe126b2c6b89299",
+    "scripts/20_extender_busqueda_mlp_lgd.py": "60ff2d27bc87b30b308d19f66c06fdd60c8f678104d15bae5f57b1c92b264fe6",
+    "docs/mlp_lgd_busqueda.md": "50b471a8af4bec33c1dd41f9739e845b3914734ba4f8743f4287ee6680835cb0"
+  },
+  "versions": {
+    "python": "3.12.14",
+    "torch": "2.8.0+cpu",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3"
+  }
+}

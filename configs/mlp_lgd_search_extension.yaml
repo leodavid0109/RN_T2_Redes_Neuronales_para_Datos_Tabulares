@@ -1,0 +1,11 @@
+# Extensión acotada del único candidato que agotó max_epochs en sus dos semillas.
+device: cpu
+num_threads: 2
+candidate_id: base32_relu_adam_pytorch_init
+partition: aleatoria
+seeds: [2026, 2027]
+batch_size: 2048
+max_epochs: 160
+patience: 12
+min_delta: 0.00001
+budget_cpu_minutes: 5

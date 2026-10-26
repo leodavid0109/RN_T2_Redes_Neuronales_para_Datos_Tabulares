@@ -113,6 +113,20 @@ La auditoría de la muestra, sus límites, el baseline Ridge y el protocolo futu
 
 El piloto de convergencia (dos inicializaciones × dos semillas × dos particiones, validación únicamente) y su extensión están en [`docs/mlp_lgd_convergencia.md`](docs/mlp_lgd_convergencia.md). Los resultados canónicos corregidos quedan en `results/lgd_mlp_convergencia_piloto_v2/` y `results/lgd_mlp_convergencia_extension_v2/`; no sustituyen la búsqueda ni las corridas finales.
 
+El protocolo de diez configuraciones exploratorias de LGD y su comando están en [`docs/mlp_lgd_busqueda.md`](docs/mlp_lgd_busqueda.md). La búsqueda selecciona por separado en cada partición y no calcula métricas de prueba.
+
+```powershell
+.\.venv\Scripts\python.exe scripts/19_buscar_mlp_lgd.py --modo search
+```
+
+La extensión acotada de las dos semillas de inicialización PyTorch se repite con:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/20_extender_busqueda_mlp_lgd.py
+```
+
+La fase final congelada de 30 semillas por partición y su análisis están en [`docs/mlp_lgd_final.md`](docs/mlp_lgd_final.md); se verifica el preflight antes del entrenamiento y la prueba se evalúa después de guardar los 60 checkpoints.
+
 ```powershell
 .\.venv\Scripts\python.exe scripts/16_entrenar_mlp_lgd.py
 ```

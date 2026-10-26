@@ -1,0 +1,3 @@
+configuracion,particion,semilla,inicializacion,epoca_mejor,epocas_ejecutadas,motivo_parada,parametros_entrenables,tiempo_entrenamiento_s,media_predicha,media_observada,mae,rmse,sesgo,r2
+base32_relu_adam_pytorch_init,aleatoria,2026,pytorch,133,133,early_stopping_patience,3233,47.77048219999779,0.9285747283242743,0.9300159779425108,0.07251792719770095,0.09458359655068355,-0.001441249618236432,0.017671485782491225
+base32_relu_adam_pytorch_init,aleatoria,2027,pytorch,143,153,early_stopping_patience,3233,55.148169100000814,0.9288702551197354,0.9300159779425108,0.07218588747458125,0.09437912834540271,-0.0011457228227753585,0.021914036378510193

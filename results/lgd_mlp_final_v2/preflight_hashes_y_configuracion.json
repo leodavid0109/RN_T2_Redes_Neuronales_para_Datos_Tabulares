@@ -1,0 +1,130 @@
+{
+  "verified_search_input_hashes": {
+    "data/processed/lgd.parquet": "f9c46db5a200d2bc3212949a55c8846bd9ab03e062a6aadf7a19bfbf2e1e690b",
+    "models/preprocessor.joblib": "be8a67e93aa423f2c6b542b25ebbc582853cf4bcd9043e098ea9cad7b202a073",
+    "results/lgd_lineal.csv": "b8c61b85290be46e01fea8ab03abc65d42cbcb2e9077bfebb409a1c3c0d95cd0",
+    "results/lgd_lineal_pred.parquet": "80a17c25a48ce731527dc09f85f110aa72d7c253699456434b302a017f01b709",
+    "results/lgd_lineal_resumen.json": "414efe310edc72f810aa7d7e139a68edcb502f890468db94b47b5c50cf27e450",
+    "results/verificacion_datos_procesados.json": "452a7a224ca606dcf245e5e5817fea18d86562be121034c94de5d7b0f9b7531f",
+    "configs/mlp_lgd.yaml": "3d799af3c1125a8c16e42ef982c47e6d5cf066b124a7bee0a7d20fc80548a684",
+    "src/mlp_lgd.py": "d0ddbf5c63a606a60797464313d190f676870cf5dbcd54c124af4d38cc420b9e",
+    "src/metricas_lgd.py": "9aa69a497362b16531b5aab3d4c93770e98ed6f5052d0d83e9f3480eacdf8659",
+    "scripts/19_buscar_mlp_lgd.py": "928a4307732153a226b68bb0964aa0658d565d1ace96ba59afe126b2c6b89299"
+  },
+  "verified_search_output_hashes": {
+    "resumen_busqueda.json": "1153fb857961c27bdb26f9b5daee7812d06cfcd730beaa788ef5a14ef6e0837a",
+    "metricas_por_corrida.csv": "8e1868de41ff09b844711126d9659ecfddbbe66a1c1f1a13b2943f859030eaf7",
+    "resumen_candidatos_media_desv.csv": "5b162b2f6809c78d5e52c00e669247c46ba525553d31c33a0abbdd2342546c12",
+    "predicciones_validacion.parquet": "cf724dc430dda5f7f2654a8fd50fbd42684a099d4d2ac7093592b84089480e29",
+    "trayectorias_por_epoca.json": "c61fc5e0c45498fc910bdb8eed390501f03a40b8cdfccad2a5752f34818046a5"
+  },
+  "selected_search_winners": {
+    "aleatoria": {
+      "configuracion": "base32_relu_adam",
+      "rmse_validacion_medio": 0.09432450738508248,
+      "criterio": "menor media de RMSE de validación entre dos semillas; partición independiente"
+    },
+    "temporal": {
+      "configuracion": "learning_rate_003",
+      "rmse_validacion_medio": 0.08546140262076912,
+      "criterio": "menor media de RMSE de validación entre dos semillas; partición independiente"
+    }
+  },
+  "frozen_configurations": {
+    "aleatoria": {
+      "id": "base32_relu_adam",
+      "changed_from_base": "Base: una capa de 32 unidades, ReLU, Adam, lr 0.001.",
+      "hypothesis": "Referencia interna; inicializar en la media de entrenamiento puede acelerar la convergencia sin alterar los datos usados.",
+      "output_initialization": "mean_train",
+      "hidden_layers": [
+        32
+      ],
+      "activation": "relu",
+      "dropout": 0.0,
+      "weight_decay": 0.0,
+      "optimizer": "adam",
+      "learning_rate": 0.001
+    },
+    "temporal": {
+      "id": "learning_rate_003",
+      "changed_from_base": "Tasa 0.001 a 0.003.",
+      "hypothesis": "Una tasa mayor puede llegar rápido a una región útil o hacer inestable el entrenamiento.",
+      "output_initialization": "mean_train",
+      "hidden_layers": [
+        32
+      ],
+      "activation": "relu",
+      "dropout": 0.0,
+      "weight_decay": 0.0,
+      "optimizer": "adam",
+      "learning_rate": 0.003
+    }
+  },
+  "final_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "id_checks_against_ridge": {
+    "aleatoria": {
+      "entrenamiento": {
+        "n": 32168,
+        "coincide_con_ridge": true
+      },
+      "validacion": {
+        "n": 6913,
+        "coincide_con_ridge": true
+      },
+      "prueba": {
+        "n": 6928,
+        "coincide_con_ridge": true
+      }
+    },
+    "temporal": {
+      "entrenamiento": {
+        "n": 29255,
+        "coincide_con_ridge": true
+      },
+      "validacion": {
+        "n": 13981,
+        "coincide_con_ridge": true
+      },
+      "prueba": {
+        "n": 2773,
+        "coincide_con_ridge": true
+      }
+    }
+  },
+  "search_wall_seconds": 515.347815000001,
+  "search_training_seconds": 510.73956050000925,
+  "search_candidate_count": 10,
+  "search_run_count": 40,
+  "hashes_validated_before_training": true
+}
