@@ -35,3 +35,4 @@ threadpoolctl==3.7.0
 torch==2.8.0+cpu
 typing_extensions==4.16.0
 tzdata==2026.5
+streamlit==1.66.1

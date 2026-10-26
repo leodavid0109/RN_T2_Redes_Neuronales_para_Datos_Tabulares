@@ -1,0 +1,290 @@
+{
+ "loan_amnt": {
+  "tipo": "num",
+  "min": 500.0,
+  "max": 35000.0,
+  "defecto": 12000.0,
+  "falta": 0.0,
+  "valores": null,
+  "entero": true
+ },
+ "term_meses": {
+  "tipo": "num",
+  "min": 36.0,
+  "max": 60.0,
+  "defecto": 36.0,
+  "falta": 0.0,
+  "valores": [
+   36.0,
+   60.0
+  ],
+  "entero": true
+ },
+ "emp_length_anios": {
+  "tipo": "num",
+  "min": 0.0,
+  "max": 10.0,
+  "defecto": 6.0,
+  "falta": 0.0399247756302834,
+  "valores": null,
+  "entero": true
+ },
+ "annual_inc": {
+  "tipo": "num",
+  "min": 1896.0,
+  "max": 8706582.0,
+  "defecto": 62000.0,
+  "falta": 1.489591479536737e-05,
+  "valores": null,
+  "entero": false
+ },
+ "dti": {
+  "tipo": "num",
+  "min": 0.0,
+  "max": 57.14,
+  "defecto": 16.33,
+  "falta": 0.0,
+  "valores": null,
+  "entero": false
+ },
+ "delinq_2yrs": {
+  "tipo": "num",
+  "min": 0.0,
+  "max": 29.0,
+  "defecto": 0.0,
+  "falta": 0.00010799538226641344,
+  "valores": null,
+  "entero": true
+ },
+ "antiguedad_cred_meses": {
+  "tipo": "num",
+  "min": 6.0,
+  "max": 793.0,
+  "defecto": 167.0,
+  "falta": 0.00010799538226641344,
+  "valores": null,
+  "entero": true
+ },
+ "inq_last_6mths": {
+  "tipo": "num",
+  "min": 0.0,
+  "max": 33.0,
+  "defecto": 1.0,
+  "falta": 0.00010799538226641344,
+  "valores": null,
+  "entero": true
+ },
+ "open_acc": {
+  "tipo": "num",
+  "min": 0.0,
+  "max": 76.0,
+  "defecto": 10.0,
+  "falta": 0.00010799538226641344,
+  "valores": null,
+  "entero": true
+ },
+ "pub_rec": {
+  "tipo": "num",
+  "min": 0.0,
+  "max": 15.0,
+  "defecto": 0.0,
+  "falta": 0.00010799538226641344,
+  "valores": null,
+  "entero": true
+ },
+ "revol_bal": {
+  "tipo": "num",
+  "min": 0.0,
+  "max": 1746716.0,
+  "defecto": 10921.0,
+  "falta": 0.0,
+  "valores": null,
+  "entero": true
+ },
+ "revol_util": {
+  "tipo": "num",
+  "min": 0.0,
+  "max": 892.3,
+  "defecto": 56.0,
+  "falta": 0.0009272706960116188,
+  "valores": null,
+  "entero": false
+ },
+ "total_acc": {
+  "tipo": "num",
+  "min": 1.0,
+  "max": 150.0,
+  "defecto": 23.0,
+  "falta": 0.00010799538226641344,
+  "valores": null,
+  "entero": true
+ },
+ "acc_now_delinq": {
+  "tipo": "num",
+  "min": 0.0,
+  "max": 5.0,
+  "defecto": 0.0,
+  "falta": 0.00010799538226641344,
+  "valores": [
+   0.0,
+   1.0,
+   2.0,
+   3.0,
+   4.0,
+   5.0
+  ],
+  "entero": true
+ },
+ "collections_12_mths_ex_med": {
+  "tipo": "num",
+  "min": 0.0,
+  "max": 6.0,
+  "defecto": 0.0,
+  "falta": 0.0005399769113320672,
+  "valores": null,
+  "entero": true
+ },
+ "mths_since_last_delinq": {
+  "tipo": "num",
+  "min": 0.0,
+  "max": 152.0,
+  "defecto": 32.0,
+  "falta": 0.5517372360630097,
+  "valores": null,
+  "entero": true
+ },
+ "mths_since_last_record": {
+  "tipo": "num",
+  "min": 0.0,
+  "max": 129.0,
+  "defecto": 77.0,
+  "falta": 0.8709380702342383,
+  "valores": null,
+  "entero": true
+ },
+ "tot_coll_amt": {
+  "tipo": "num",
+  "min": 0.0,
+  "max": 9152545.0,
+  "defecto": 0.0,
+  "falta": 0.24800208542807134,
+  "valores": null,
+  "entero": true
+ },
+ "tot_cur_bal": {
+  "tipo": "num",
+  "min": 0.0,
+  "max": 8000078.0,
+  "defecto": 79124.0,
+  "falta": 0.24800208542807134,
+  "valores": null,
+  "entero": true
+ },
+ "total_rev_hi_lim": {
+  "tipo": "num",
+  "min": 0.0,
+  "max": 2013133.0,
+  "defecto": 22163.5,
+  "falta": 0.24800208542807134,
+  "valores": null,
+  "entero": true
+ },
+ "home_ownership": {
+  "tipo": "cat",
+  "valores": [
+   "ANY",
+   "MORTGAGE",
+   "NONE",
+   "OTHER",
+   "OWN",
+   "RENT"
+  ],
+  "defecto": "MORTGAGE"
+ },
+ "verification_status": {
+  "tipo": "cat",
+  "valores": [
+   "Not Verified",
+   "Source Verified",
+   "Verified"
+  ],
+  "defecto": "Verified"
+ },
+ "purpose": {
+  "tipo": "cat",
+  "valores": [
+   "car",
+   "credit_card",
+   "debt_consolidation",
+   "educational",
+   "home_improvement",
+   "house",
+   "major_purchase",
+   "medical",
+   "moving",
+   "other",
+   "renewable_energy",
+   "small_business",
+   "vacation",
+   "wedding"
+  ],
+  "defecto": "debt_consolidation"
+ },
+ "addr_state": {
+  "tipo": "cat",
+  "valores": [
+   "AK",
+   "AL",
+   "AR",
+   "AZ",
+   "CA",
+   "CO",
+   "CT",
+   "DC",
+   "DE",
+   "FL",
+   "GA",
+   "HI",
+   "IA",
+   "ID",
+   "IL",
+   "IN",
+   "KS",
+   "KY",
+   "LA",
+   "MA",
+   "MD",
+   "ME",
+   "MI",
+   "MN",
+   "MO",
+   "MS",
+   "MT",
+   "NC",
+   "ND",
+   "NE",
+   "NH",
+   "NJ",
+   "NM",
+   "NV",
+   "NY",
+   "OH",
+   "OK",
+   "OR",
+   "PA",
+   "RI",
+   "SC",
+   "SD",
+   "TN",
+   "TX",
+   "UT",
+   "VA",
+   "VT",
+   "WA",
+   "WI",
+   "WV",
+   "WY"
+  ],
+  "defecto": "CA"
+ }
+}

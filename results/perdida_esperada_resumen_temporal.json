@@ -2,6 +2,8 @@
   "particion": "temporal",
   "conjunto": "prueba",
   "n": 30835,
+  "modelo": "referencia",
+  "semillas": null,
   "ead_definicion": "funded_amnt al originar",
   "perdida_esperada_total": 102526882.88789828,
   "perdida_realizada_min_total": 38666227.42090003,
@@ -12,5 +14,5 @@
   "incumplidos_censurados_en_evaluacion": 5078,
   "incumplidos_en_evaluacion": 7851,
   "ead_incumplimiento_sobre_funded_media": 0.9119740987788636,
-  "tiempo_s": 2.94
+  "tiempo_s": 2.87
 }
