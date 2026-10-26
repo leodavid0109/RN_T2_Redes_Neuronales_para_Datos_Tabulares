@@ -43,8 +43,11 @@ def main(a):
     y = df["lgd"].to_numpy()
     print(f"Muestra: {len(df):,} castigados | {X.shape[1]} características")
 
-    Path("models").mkdir(exist_ok=True)
-    Path("results").mkdir(exist_ok=True)
+    # El modo demo escribe en models/demo y results/demo: nunca pisa los resultados finales
+    sub = "demo" if a.demo else ""
+    dir_mod, dir_res = Path("models") / sub, Path("results") / sub
+    dir_mod.mkdir(parents=True, exist_ok=True)
+    dir_res.mkdir(parents=True, exist_ok=True)
     filas, preds = [], []
 
     for part, col in SPLITS.items():
@@ -78,16 +81,16 @@ def main(a):
                 "id": df.loc[idx[c], "id"].to_numpy(), "particion": part,
                 "conjunto": c, "lgd_obs": y[idx[c]],
                 "lgd_pred_cruda": p, "lgd_pred": np.clip(p, 0, 1)}))
-        joblib.dump(mod, f"models/lgd_lineal_{part}.joblib")
+        joblib.dump(mod, dir_mod / f"lgd_lineal_{part}.joblib")
 
     res = pd.DataFrame(filas)
-    res.to_csv("results/lgd_lineal.csv", index=False)
-    pd.concat(preds).to_parquet("results/lgd_lineal_pred.parquet", index=False)
+    res.to_csv(dir_res / "lgd_lineal.csv", index=False)
+    pd.concat(preds).to_parquet(dir_res / "lgd_lineal_pred.parquet", index=False)
 
     t_total = time.perf_counter() - t_ini
     json.dump({"configuraciones_por_particion": len(a.alphas),
                "tiempo_total_s": round(t_total, 2), "demo": a.demo},
-              open("results/lgd_lineal_resumen.json", "w"), indent=2)
+              open(dir_res / "lgd_lineal_resumen.json", "w"), indent=2)
 
     cols = ["modelo", "particion", "conjunto", "mae", "rmse", "sesgo", "r2",
             "pct_fuera_de_rango"]
