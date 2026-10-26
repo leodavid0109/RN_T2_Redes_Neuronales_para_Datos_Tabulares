@@ -3,14 +3,14 @@
   "conjunto": "prueba",
   "n": 30835,
   "ead_definicion": "funded_amnt al originar",
-  "perdida_esperada_total": 102526882.8878983,
+  "perdida_esperada_total": 102526882.88789828,
   "perdida_realizada_min_total": 38666227.42090003,
   "perdida_realizada_max_total": 110235579.34090003,
   "exposicion_total_funded": 452036150.0,
-  "pd_media": 0.23099473785185345,
+  "pd_media": 0.23099473785185348,
   "tasa_incumplimiento_obs": 0.2546132641478839,
   "incumplidos_censurados_en_evaluacion": 5078,
   "incumplidos_en_evaluacion": 7851,
   "ead_incumplimiento_sobre_funded_media": 0.9119740987788636,
-  "tiempo_s": 1.51
+  "tiempo_s": 2.94
 }

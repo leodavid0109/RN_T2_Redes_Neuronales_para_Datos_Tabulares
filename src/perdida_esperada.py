@@ -15,8 +15,8 @@ reportan dos cotas:
   - perdida_realizada_min: los censurados cuentan como pérdida 0.
 
 Uso (desde la raíz del repo):
-    python src/expected_loss.py
-    python src/expected_loss.py --particion temporal
+    python src/perdida_esperada.py --modelo mlp
+    python src/perdida_esperada.py --modelo mlp --semillas 3   # prueba rápida
 """
 import argparse
 import json
@@ -28,6 +28,49 @@ import numpy as np
 import pandas as pd
 
 RAIZ = Path(__file__).resolve().parents[1]
+
+def predecir_referencia(X, part):
+    m_pd = joblib.load(RAIZ / f"models/pd_logreg_{part}.joblib")
+    m_lgd = joblib.load(RAIZ / f"models/lgd_lineal_{part}.joblib")
+    return m_pd.predict_proba(X)[:, 1], np.clip(m_lgd.predict(X), 0.0, 1.0)
+
+
+def predecir_mlp(X, pre, part, n_semillas):
+    """Promedio de las predicciones de las semillas 0..n_semillas-1 (PD y LGD)."""
+    import torch
+    from mlp_pd import MLPBinario, probabilidades_clase_1
+    from mlp_lgd import MLPRegresorLGD, predecir_lgd
+
+    X = X.toarray() if hasattr(X, "toarray") else np.asarray(X)
+    X = np.ascontiguousarray(X, dtype=np.float32)
+    suma_pd = np.zeros(len(X))
+    suma_lgd = np.zeros(len(X))
+
+    for s in range(n_semillas):
+        # --- PD ---
+        ruta = RAIZ / f"models/pd_mlp_final_particionado/pd_mlp_{part}_final_seed_{s}.pt"
+        ck = torch.load(ruta, map_location="cpu", weights_only=False)
+        if ck["input_dim"] != X.shape[1]:
+            raise SystemExit(f"{ruta.name}: input_dim={ck['input_dim']} pero X tiene {X.shape[1]} columnas.")
+        if s == 0:
+            print("PD MLP -> probability_of:", ck.get("probability_of"), "| target:", ck.get("target_meaning"))
+            if list(pre.feature_names_in_) != list(ck["input_columns"]):
+                raise SystemExit("input_columns del PD MLP no coincide con las columnas de entrada del preprocesador.")
+        net = MLPBinario(ck["input_dim"], ck["model_config"])
+        net.load_state_dict(ck["state_dict"])
+        suma_pd += probabilidades_clase_1(net, X)
+
+        # --- LGD ---
+        ruta = RAIZ / f"models/lgd_mlp_final_v2/lgd_mlp_{part}_seed_{s:02d}.pt"
+        ck = torch.load(ruta, map_location="cpu", weights_only=False)
+        if s == 0 and list(pre.feature_names_in_) != list(ck["input_columns"]):
+            raise SystemExit("input_columns del LGD MLP no coincide con las columnas de entrada del preprocesador.")
+        net = MLPRegresorLGD(ck["input_dim"], ck["config"])
+        net.load_state_dict(ck["state_dict"])
+        suma_lgd += predecir_lgd(net, X)
+        print(f"  semilla {s} lista")
+
+    return suma_pd / n_semillas, np.clip(suma_lgd / n_semillas, 0.0, 1.0)
 
 
 def cargar_ead(ruta_ead, ruta_raw):
@@ -59,10 +102,11 @@ def main(a):
     # Predicciones: mismo preprocesador compartido, solo transform
     pre = joblib.load(RAIZ / "models/preprocessor.joblib")
     X = pre.transform(df[list(pre.feature_names_in_)])
-    m_pd = joblib.load(RAIZ / f"models/pd_logreg_{part}.joblib")
-    m_lgd = joblib.load(RAIZ / f"models/lgd_lineal_{part}.joblib")
-    df["pd_hat"] = m_pd.predict_proba(X)[:, 1]
-    df["lgd_hat"] = np.clip(m_lgd.predict(X), 0.0, 1.0)
+    if a.modelo == "referencia":
+        df["pd_hat"], df["lgd_hat"] = predecir_referencia(X, part)
+    else:
+        df["pd_hat"], df["lgd_hat"] = predecir_mlp(X, pre, part, a.semillas)
+    suf = "" if a.modelo == "referencia" else "_mlp"
     df["ead_usado"] = df["funded_amnt"]
     df["perdida_esperada"] = df["pd_hat"] * df["lgd_hat"] * df["ead_usado"]
 
@@ -83,7 +127,7 @@ def main(a):
               "perdida_realizada_max", "perdida_realizada_min"]:
         sal[c] = sal[c].astype("float32")
     (RAIZ / "results").mkdir(exist_ok=True)
-    sal.to_parquet(RAIZ / f"results/perdida_esperada_{part}.parquet", index=False)
+    sal.to_parquet(RAIZ / f"results/perdida_esperada_{part}{suf}.parquet", index=False)
 
     # Contraste por deciles de PD en el conjunto elegido (por defecto, prueba)
     ev = df[df[col_split] == a.conjunto].copy()
@@ -100,10 +144,12 @@ def main(a):
     ).reset_index()
     g["razon_esperada_vs_max"] = g["perdida_esperada_total"] / g["perdida_realizada_max_total"]
     g["razon_esperada_vs_min"] = g["perdida_esperada_total"] / g["perdida_realizada_min_total"]
-    g.to_csv(RAIZ / f"results/perdida_esperada_deciles_{part}.csv", index=False)
+    g.to_csv(RAIZ / f"results/perdida_esperada_deciles_{part}{suf}.csv", index=False)
 
     tot = {
         "particion": part, "conjunto": a.conjunto, "n": int(len(ev)),
+        "modelo": a.modelo,
+        "semillas": a.semillas if a.modelo == "mlp" else None,
         "ead_definicion": "funded_amnt al originar",
         "perdida_esperada_total": float(ev["perdida_esperada"].sum()),
         "perdida_realizada_min_total": float(ev["perdida_realizada_min"].sum()),
@@ -118,7 +164,7 @@ def main(a):
              / ev.loc[ev["ead_incumplimiento"] > 0, "funded_amnt"]).mean()),
         "tiempo_s": round(time.perf_counter() - t0, 2),
     }
-    json.dump(tot, open(RAIZ / f"results/perdida_esperada_resumen_{part}.json", "w"), indent=2)
+    json.dump(tot, open(RAIZ / f"results/perdida_esperada_resumen_{part}{suf}.json", "w"), indent=2)
 
     pd.set_option("display.width", 200)
     print(f"Partición {part} | conjunto {a.conjunto} | n = {len(ev):,}")
@@ -134,4 +180,6 @@ if __name__ == "__main__":
     ap.add_argument("--conjunto", choices=["entrenamiento", "validacion", "prueba"], default="prueba")
     ap.add_argument("--ead-archivo", default="data/processed/ead.parquet")
     ap.add_argument("--raw", default="data/raw/loan.csv")
+    ap.add_argument("--modelo", choices=["referencia", "mlp"], default="referencia")
+    ap.add_argument("--semillas", type=int, default=30, help="solo para --modelo mlp")
     main(ap.parse_args())

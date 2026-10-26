@@ -1,0 +1,26 @@
+{
+  "aleatoria": [
+    {
+      "epoch": 1,
+      "train_mse_mean": 0.1581146977841854,
+      "valid_rmse": 0.3617202159167656
+    },
+    {
+      "epoch": 2,
+      "train_mse_mean": 0.1103998669423163,
+      "valid_rmse": 0.2977632470902605
+    }
+  ],
+  "temporal": [
+    {
+      "epoch": 1,
+      "train_mse_mean": 0.15276939570903778,
+      "valid_rmse": 0.38689617447695057
+    },
+    {
+      "epoch": 2,
+      "train_mse_mean": 0.10537110219399135,
+      "valid_rmse": 0.3408287689519562
+    }
+  ]
+}

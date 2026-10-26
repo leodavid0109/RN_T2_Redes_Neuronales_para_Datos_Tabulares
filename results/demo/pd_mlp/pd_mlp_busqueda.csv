@@ -1,0 +1,3 @@
+configuracion,particion,semilla_exploratoria,configuracion_json,epoca_mejor,epocas_ejecutadas,parametros_entrenables,tiempo_entrenamiento_s
+demo32_relu_adam,aleatoria,919,"{""activation"": ""relu"", ""dropout"": 0.0, ""hidden_layers"": [32], ""id"": ""demo32_relu_adam"", ""learning_rate"": 0.001, ""optimizer"": ""adam"", ""weight_decay"": 0.0}",2,2,3233,3.4845193000510335
+demo32_relu_adam,temporal,919,"{""activation"": ""relu"", ""dropout"": 0.0, ""hidden_layers"": [32], ""id"": ""demo32_relu_adam"", ""learning_rate"": 0.001, ""optimizer"": ""adam"", ""weight_decay"": 0.0}",2,2,3233,2.6225262000225484
