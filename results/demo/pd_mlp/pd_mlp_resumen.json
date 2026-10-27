@@ -114,7 +114,7 @@
     "temporal": 0.0
   },
   "tiempo_total_entrenamiento_final_s": null,
-  "tiempo_total_ejecucion_s": 8.304039,
+  "tiempo_total_ejecucion_s": 6.104092,
   "presupuesto_cpu_minutos_declarado": {
     "search": 60,
     "final": 75

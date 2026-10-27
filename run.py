@@ -38,7 +38,7 @@ def cmd(desc, pasos, acepta=False, limpiar=()):
 
 
 COMANDOS = {
-    # ---- Parte 1 (A)
+    
     "datos": cmd(
         "Genera pd.parquet y lgd.parquet desde data/raw/loan.csv "
         "(requiere el CSV original)",
@@ -88,7 +88,7 @@ COMANDOS = {
         ],
     ),
 
-    # ---- Redes neuronales (B)
+    
     "pd-mlp": cmd(
         "[Persona B] MLP de PD: --mode demo|search|final y rutas de salida nuevas",
         ["scripts/14_entrenar_mlp_pd.py"],
@@ -143,7 +143,7 @@ COMANDOS = {
         acepta=True,
     ),
 
-    # ---- Parte 2 (C)
+    
     "lgd-lineal": cmd(
         "[REGENERA modelos] LGD: Ridge de referencia "
         "(admite --alphas, --demo, --seed)",
@@ -177,6 +177,8 @@ COMBOS = {
         "Demostración (< 2 min): Ridge, MLP de PD, MLP de LGD en modo demo "
         "+ pérdida esperada + pruebas",
         [
+            ("perdida-esperada", []),
+            ("perdida-esperada", ["--modelo", "mlp", "--semillas", "3"]),
             ("lgd-lineal", ["--demo"]),
             ("pd-mlp-demo", []),
             ("lgd-mlp-demo", []),
@@ -192,6 +194,8 @@ COMBOS = {
             ("lgd-figura", []),
             ("perdida-esperada", ["--particion", "aleatoria"]),
             ("perdida-esperada", ["--particion", "temporal"]),
+            ("perdida-esperada", ["--modelo", "mlp", "--particion", "aleatoria"]),
+            ("perdida-esperada", ["--modelo", "mlp", "--particion", "temporal"]),
             ("tablas-pd", []),
             ("tests", []),
         ],

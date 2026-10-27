@@ -3,16 +3,16 @@
   "conjunto": "prueba",
   "n": 40280,
   "modelo": "mlp",
-  "semillas": 30,
+  "semillas": 3,
   "ead_definicion": "funded_amnt al originar",
-  "perdida_esperada_total": 120044128.72265774,
+  "perdida_esperada_total": 121385865.94808993,
   "perdida_realizada_min_total": 70864983.94505608,
   "perdida_realizada_max_total": 92979012.80505607,
   "exposicion_total_funded": 545217575.0,
-  "pd_media": 0.21923747344258146,
+  "pd_media": 0.22252718056211593,
   "tasa_incumplimiento_obs": 0.21904170804369413,
   "incumplidos_censurados_en_evaluacion": 1895,
   "incumplidos_en_evaluacion": 8823,
   "ead_incumplimiento_sobre_funded_media": 0.7423698076963449,
-  "tiempo_s": 6.26
+  "tiempo_s": 4.03
 }

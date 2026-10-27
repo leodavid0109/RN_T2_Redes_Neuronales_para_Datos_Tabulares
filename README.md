@@ -8,7 +8,7 @@ PyTorch está fijado a la distribución **CPU** (`2.8.0+cpu`). El equipo de desa
 
 La integración de LGD y pérdida esperada usa NumPy, pandas, SciPy, scikit-learn, pyarrow, joblib y matplotlib, ya incluidos en este conjunto fijo; no requiere paquetes adicionales. Se conservan las versiones verificadas con los artefactos existentes en lugar de cambiar el entorno al resolver el `requirements.txt` de ambos frentes.
 
-No hay todavía código de aplicación web, por lo que no se agregan dependencias de interfaz. `pytest` tampoco es necesario para la prueba actual: `tests/test_scorecard.py` puede ejecutarse directamente con Python.
+La aplicación web usa Streamlit (versión fijada en requirements.txt). Para el despliegue público se usa app/requirements.txt, una lista reducida sin PyTorch, porque la app solo necesita la scorecard.
 
 ### Windows (PowerShell)
 
