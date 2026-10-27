@@ -26,8 +26,6 @@ from src.mlp_lgd import entrenar_una_corrida, predecir_lgd
 
 PARTITIONS = {"aleatoria": "split_random", "temporal": "split_temporal"}
 SETS = ("entrenamiento", "validacion", "prueba")
-SEARCH_DIR = ROOT / "results/lgd_mlp_search_v1"
-SEARCH_SUMMARY = SEARCH_DIR / "resumen_busqueda.json"
 SEARCH_ARTIFACTS = (
     "resumen_busqueda.json", "metricas_por_corrida.csv", "resumen_candidatos_media_desv.csv",
     "predicciones_validacion.parquet", "trayectorias_por_epoca.json",
@@ -47,10 +45,16 @@ def require_new(path: Path) -> None:
         raise FileExistsError(f"No sobrescribo artefactos: {path}; use otra ruta")
 
 
-def preflight() -> dict:
-    if not SEARCH_SUMMARY.is_file():
-        raise FileNotFoundError(f"Falta el resumen congelado de búsqueda: {SEARCH_SUMMARY}")
-    search = json.loads(SEARCH_SUMMARY.read_text(encoding="utf-8"))
+def preflight(search_dir: Path) -> dict:
+    search_dir = search_dir.resolve()
+    try:
+        search_label = search_dir.relative_to(ROOT).as_posix()
+    except ValueError:
+        search_label = str(search_dir)
+    search_summary_path = search_dir / "resumen_busqueda.json"
+    if not search_summary_path.is_file():
+        raise FileNotFoundError(f"Falta el resumen congelado de búsqueda: {search_summary_path}")
+    search = json.loads(search_summary_path.read_text(encoding="utf-8"))
     if search.get("mode") != "search" or search.get("test_metrics_calculated") or search.get("test_used_for_selection"):
         raise ValueError("El manifiesto de búsqueda no acredita una selección solo con validación")
     mismatches = []
@@ -61,8 +65,8 @@ def preflight() -> dict:
     if mismatches:
         raise RuntimeError(f"Cambió una entrada de la búsqueda; no inicio final: {mismatches}")
 
-    search_file_hashes = {name: sha256(SEARCH_DIR / name) for name in SEARCH_ARTIFACTS}
-    runs = pd.read_csv(SEARCH_DIR / "metricas_por_corrida.csv")
+    search_file_hashes = {name: sha256(search_dir / name) for name in SEARCH_ARTIFACTS}
+    runs = pd.read_csv(search_dir / "metricas_por_corrida.csv")
     if len(runs) != 40 or runs["particion"].nunique() != 2:
         raise ValueError(f"Número/estructura inesperada de corridas de búsqueda: {len(runs)}")
     cfg = yaml.safe_load((ROOT / "configs/mlp_lgd.yaml").read_text(encoding="utf-8"))
@@ -101,6 +105,7 @@ def preflight() -> dict:
             id_checks[partition][subset] = {"n": len(ids), "coincide_con_ridge": True}
 
     return {
+        "search_directory": search_label,
         "verified_search_input_hashes": search["input_hashes"],
         "verified_search_output_hashes": search_file_hashes,
         "selected_search_winners": search["selected_per_partition"],
@@ -135,13 +140,17 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--modo", choices=["final"], default="final")
     parser.add_argument("--preflight-only", action="store_true", help="Verifica hashes/selección/IDs sin entrenar")
+    parser.add_argument("--search-dir", default="results/lgd_mlp_search_v1",
+                        help="Carpeta de búsqueda congelada cuyo resumen y hashes verificará el modo final")
     parser.add_argument("--output-dir", default="results/lgd_mlp_final_v2")
     parser.add_argument("--models-dir", default="models/lgd_mlp_final_v2")
     args = parser.parse_args()
     out_dir, model_dir = Path(args.output_dir), Path(args.models_dir)
     if not out_dir.is_absolute(): out_dir = ROOT / out_dir
     if not model_dir.is_absolute(): model_dir = ROOT / model_dir
-    pre = preflight()
+    search_dir = Path(args.search_dir)
+    if not search_dir.is_absolute(): search_dir = ROOT / search_dir
+    pre = preflight(search_dir)
     if args.preflight_only:
         print(json.dumps(pre, ensure_ascii=False, indent=2))
         return 0
@@ -160,9 +169,9 @@ def main() -> int:
     try: torch.set_num_interop_threads(1)
     except RuntimeError: pass
 
-    output_hashes = {name: sha256(SEARCH_DIR / name) for name in SEARCH_ARTIFACTS}
+    output_hashes = {name: sha256(search_dir / name) for name in SEARCH_ARTIFACTS}
     source_hashes = dict(pre["verified_search_input_hashes"])
-    source_hashes.update({f"results/lgd_mlp_search_v1/{k}": v for k, v in output_hashes.items()})
+    source_hashes.update({f"{pre['search_directory']}/{k}": v for k, v in output_hashes.items()})
     model_dir.mkdir(parents=True, exist_ok=True)
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "preflight_hashes_y_configuracion.json").write_text(
@@ -339,9 +348,11 @@ def main() -> int:
     by_seed_time.to_csv(out_dir / "tiempos_por_particion.csv", index=False)
 
     ver = json.loads((ROOT / "results/verificacion_datos_procesados.json").read_text(encoding="utf-8"))
-    search_summary = json.loads(SEARCH_SUMMARY.read_text(encoding="utf-8"))
+    search_summary = json.loads((search_dir / "resumen_busqueda.json").read_text(encoding="utf-8"))
     search_extension_path = ROOT / "results/lgd_mlp_search_extension_v2/resumen_extension.json"
-    extension_wall = json.loads(search_extension_path.read_text(encoding="utf-8"))["wall_seconds"] if search_extension_path.exists() else 0.0
+    extension_wall = None
+    if pre["search_directory"] == "results/lgd_mlp_search_v1" and search_extension_path.exists():
+        extension_wall = json.loads(search_extension_path.read_text(encoding="utf-8"))["wall_seconds"]
     final_wall = time.perf_counter() - wall_start
     final_train_total = float(run_df.tiempo_entrenamiento_s.sum())
     summary = {

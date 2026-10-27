@@ -1,5 +1,7 @@
 # Búsqueda exploratoria de hiperparámetros LGD
 
+> Estado actual: esta búsqueda terminó y sus ganadores se congelaron para 30 semillas en [`mlp_lgd_final.md`](mlp_lgd_final.md). La sección de cierre actualiza el resultado sin cambiar el protocolo predeclarado. No se usó prueba para elegir.
+
 ## Protocolo fijado antes de ejecutar
 
 Esta búsqueda no usa la prueba. Utiliza la muestra `castigado=True` de `data/processed/lgd.parquet`, el `ColumnTransformer` ya guardado (29 columnas de entrada → 99 características), las máscaras `split_random`/`split_temporal` y las filas exactas ya evaluadas por Ridge. Se comprobará igualdad de IDs para entrenamiento, validación y prueba; en la prueba se validan únicamente IDs, sin calcular métricas ni usar objetivos/predicciones para selección.
@@ -91,7 +93,7 @@ La regla fijada selecciona independientemente la menor media de RMSE de validaci
 | Aleatoria | `base32_relu_adam`, `mean_train` | **0,094325** | 0,094746 | 0,095436 | 0,000422 (0,45 %) | 0,001111 (1,16 %) |
 | Temporal | `learning_rate_003`, `mean_train` | **0,085461** | 0,085859 | 0,085752 | 0,000398 (0,46 %) | 0,000291 (0,34 %) |
 
-La ventaja aleatoria es pequeña pero repetible entre las dos semillas frente a Ridge/media. En temporal, lr=0,003 es el menor promedio por regla, pero su desviación entre semillas (0,000429) supera la ventaja frente a la media train; no se debe presentar como una diferencia robusta. La media temporal ya es casi tan buena. Ambas configuraciones mantienen 3.233 parámetros; el mayor ancho (6.465) y profundidad (3.745) no compensan sus mejoras nulas o mínimas. AdamW es prácticamente igual a Adam base en aleatoria. Dropout/weight decay/tanh y tasas alternativas no muestran una ganancia consistente en ambas particiones. Como el criterio solicitado es RMSE y LR=0,003 temporal gana su partición, se conserva como candidata para la fase final, sin afirmar que vaya a superar al baseline en una evaluación final independiente.
+La ventaja aleatoria es pequeña pero repetible entre las dos semillas frente a Ridge/media. En temporal, lr=0,003 fue el menor promedio por regla, pero su desviación entre semillas (0,000429) supera la ventaja frente a la media train; no se presenta como diferencia robusta. La media temporal ya era casi tan buena. Ambas configuraciones seleccionadas mantienen 3.233 parámetros; el mayor ancho (6.465) y profundidad (3.745) no compensan sus mejoras nulas o mínimas. AdamW es prácticamente igual a Adam base en aleatoria. Dropout/weight decay/tanh y tasas alternativas no muestran una ganancia consistente en ambas particiones. La configuración temporal se conservó para la fase final por la regla predeclarada; la comparación final no mostró superioridad general frente a las referencias.
 
 La inicialización PyTorch fue más lenta y peor que `mean_train` en esta búsqueda; además agotó el máximo aleatorio. La extensión confirmó que no era solo un corte temprano: se repitieron las dos semillas desde el inicio con máximo 160 épocas y paciencia 12 (el estado Adam no se había guardado). Comando:
 
@@ -120,7 +122,7 @@ Esta interpretación usa solo las dos semillas de validación exploratoria. “�
 
 † En la búsqueda original, la corrida temporal fue 0,086070 frente a base 0,085739. En aleatoria el resultado original alcanzó el límite de épocas, por lo que se reporta el resultado de la extensión v2 (media 0,094482) para juzgar el contraste ya convergido. Las diferencias pequeñas no se presentan como certeza estadística.
 
-La selección final de búsqueda es independiente: aleatoria elige la propia base (0,094325, mejor que Ridge 0,094746 y media 0,095436 en validación); temporal elige `learning_rate_003` (0,085461, por debajo de Ridge 0,085859 y media 0,085752). La ganancia temporal frente a la media es 0,000291 y no supera la variabilidad observada entre las dos semillas; se lleva a la fase de 30 semillas como candidata congelada por la regla predeclarada, no como prueba de superioridad.
+La selección de búsqueda fue independiente: aleatoria eligió la base (0,094325, menor que Ridge 0,094746 y media 0,095436 en validación); temporal eligió `learning_rate_003` (0,085461, por debajo de Ridge 0,085859 y media 0,085752). La ventaja temporal frente a la media es 0,000291 y menor que la desviación entre semillas exploratorias. Después se entrenaron las 30 semillas y se midió prueba solo con los modelos congelados; la interpretación final está en [`mlp_lgd_final.md`](mlp_lgd_final.md).
 
 El repositorio no contiene el informe, datos ni métricas de la evaluación de A que motivó conservar el preprocesador. Esa decisión consta como información comunicada por el equipo, no como resultado verificado aquí. La selección temporal sigue condicionada por el preprocesador ajustado en entrenamiento aleatorio y su posible solapamiento.
 
@@ -132,6 +134,6 @@ En validación aleatoria, la configuración seleccionada predice media 0,9299 fr
 
 La media de LGD en validación aumenta de 0,930 aleatoria a 0,945 temporal, y la masa en uno sube de 45,96 % a 62,72 %. El temporal base del preprocesador sigue siendo `entrenamiento_aleatorio`, por lo que pudo incorporar filas de validación/prueba temporal. La selección temporal y cualquier ventaja de validación son provisionales bajo ese problema de datos; la red no elimina deriva ni fuga.
 
-## Recomendación
+## Cierre de la búsqueda
 
-El protocolo está listo para preparar la fase final, con reservas: usar la base `mean_train` en aleatoria y probar `learning_rate=0,003` en temporal frente a la media/Ridge; conservar una comparación clara con la media temporal porque la ganancia exploratoria es pequeña e inestable. Repetir las 30 semillas solo después de congelar las dos configuraciones y el método de reentrenamiento. La inicialización PyTorch se mantiene como control ya completado, no como candidata seleccionada. No se ajustará usando prueba; las treinta corridas finales y prueba permanecen pendientes. La evaluación temporal sigue condicionada a la decisión/metodología del preprocesador compartido.
+La selección se congeló como `base32_relu_adam` para aleatoria y `learning_rate_003` para temporal, ambas con `mean_train`; la fase de 30 semillas ya está completada en [`mlp_lgd_final.md`](mlp_lgd_final.md). La ganancia exploratoria temporal es pequeña e inestable frente a la media de entrenamiento, por lo que el ganador sigue siendo consecuencia de la regla predeclarada, no evidencia suficiente de superioridad. La prueba se usó solo después del congelamiento final. Los resultados temporales conservan la limitación del preprocesador compartido.

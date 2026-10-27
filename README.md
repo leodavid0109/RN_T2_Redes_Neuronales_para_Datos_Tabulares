@@ -134,3 +134,32 @@ La fase final congelada de 30 semillas por partición y su análisis están en [
 ```bash
 python scripts/16_entrenar_mlp_lgd.py
 ```
+
+
+## Comandos principales
+
+Desde la raíz del repo y con el entorno activo. `python run.py` lista todos los comandos.
+
+| Qué hace | Comando |
+|---|---|
+| Demostración (< 2 min) | `python run.py demo` |
+| Regenerar tablas, figuras y pérdida esperada (sin reentrenar) | `python run.py todo` |
+| LGD lineal de referencia | `python run.py lgd-lineal` |
+| Figura de LGD predicha vs. observada | `python run.py lgd-figura` |
+| Pérdida esperada con los modelos de referencia | `python run.py perdida-esperada` |
+| Pérdida esperada con los MLP (30 semillas) | `python run.py perdida-esperada --modelo mlp` |
+| Misma, partición temporal | `python run.py perdida-esperada --modelo mlp --particion temporal` |
+| Prueba rápida del MLP (3 semillas) | `python run.py perdida-esperada --modelo mlp --semillas 3` |
+| Scorecard | `python run.py scorecard` |
+| Aplicación web local | `python run.py app` |
+
+## Pérdida esperada 
+
+E[L] = PD · LGD · EAD, con EAD = `funded_amnt` al originar. Con `--modelo referencia` se usan la regresión logística y el modelo lineal de LGD; con `--modelo mlp`, el promedio de las predicciones de las semillas 0 a 29 de los MLP de PD y de LGD de la partición pedida. Los resultados se guardan en `results/perdida_esperada_<particion>[_mlp].parquet`, `perdida_esperada_deciles_*.csv` y `perdida_esperada_resumen_*.json`.
+
+## Aplicación web
+
+- Local: `python run.py app` (o `streamlit run app/app.py`).
+- Pública: <https://rnt2meprestas.streamlit.app/>.
+- `scripts/22_preparar_app.py` genera `app/datos_app.json` (rangos y valores por defecto); ya está versionado y solo hay que correrlo si cambian las variables.
+- La app calcula el puntaje con la regresión logística de la scorecard (`models/scorecard_referencia.json` y `results/score_distribution.csv`) y no guarda lo que el usuario ingresa.

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import argparse
 import os
 import sys
 import time
@@ -44,7 +45,15 @@ def sha256(path: Path) -> str:
 
 
 def main() -> None:
-    for p in (OUT, MODELS):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output-dir", default=str(OUT.relative_to(ROOT)))
+    parser.add_argument("--models-dir", default=str(MODELS.relative_to(ROOT)))
+    args = parser.parse_args()
+    out_dir = Path(args.output_dir)
+    model_dir = Path(args.models_dir)
+    if not out_dir.is_absolute(): out_dir = ROOT / out_dir
+    if not model_dir.is_absolute(): model_dir = ROOT / model_dir
+    for p in (out_dir, model_dir):
         if p.exists() and any(p.iterdir()):
             raise FileExistsError(f"No sobrescribo carpeta con contenido: {p}")
     config = yaml.safe_load((ROOT / "configs/mlp_lgd_convergencia.yaml").read_text(encoding="utf-8"))
@@ -115,7 +124,7 @@ def main() -> None:
                     "inicializacion": init, "semilla": seed,
                     "lgd_observada": observed, "lgd_predicha": pred,
                 }))
-                ckpt = MODELS / f"{partition}_{init}_seed_{seed}.pt"
+                ckpt = model_dir / f"{partition}_{init}_seed_{seed}.pt"
                 ckpt.parent.mkdir(parents=True, exist_ok=True)
                 torch.save({
                     "state_dict": run["state_dict"], "input_dim": int(x.shape[1]),
@@ -141,11 +150,11 @@ def main() -> None:
                                   "n": int(rec.n)})
     baselines = pd.DataFrame(baseline_rows)
     pred_df = pd.concat(pred_rows, ignore_index=True)
-    OUT.mkdir(parents=True, exist_ok=True)
-    metrics_df.to_csv(OUT / "metricas_validacion.csv", index=False)
-    baselines.to_csv(OUT / "baselines_validacion.csv", index=False)
-    pred_df.to_parquet(OUT / "predicciones_validacion.parquet", index=False)
-    with (OUT / "trayectorias_por_epoca.json").open("w", encoding="utf-8") as f:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    metrics_df.to_csv(out_dir / "metricas_validacion.csv", index=False)
+    baselines.to_csv(out_dir / "baselines_validacion.csv", index=False)
+    pred_df.to_parquet(out_dir / "predicciones_validacion.parquet", index=False)
+    with (out_dir / "trayectorias_por_epoca.json").open("w", encoding="utf-8") as f:
         json.dump(histories, f, ensure_ascii=False, indent=2)
 
     fig, axes = plt.subplots(2, 2, figsize=(12, 8))
@@ -162,7 +171,7 @@ def main() -> None:
         axes[1, col].axhline(float(baselines.loc[(baselines.particion == partition) & (baselines.modelo == "media_train"), "rmse"].iloc[0]), color="gray", ls=":", label="Media train")
         axes[0, col].legend(fontsize=7); axes[1, col].legend(fontsize=7)
     fig.tight_layout()
-    fig.savefig(OUT / "curvas_convergencia_validacion.png", dpi=180)
+    fig.savefig(out_dir / "curvas_convergencia_validacion.png", dpi=180)
     plt.close(fig)
 
     fig, axes = plt.subplots(1, 2, figsize=(11, 4))
@@ -176,7 +185,7 @@ def main() -> None:
             ax.hist(vals, bins=bins, density=True, histtype="step", lw=1.5, label=f"MLP {init}")
         ax.set(title=f"{partition}: validación", xlabel="LGD", ylabel="Densidad")
         ax.legend(fontsize=8)
-    fig.tight_layout(); fig.savefig(OUT / "distribuciones_validacion.png", dpi=180); plt.close(fig)
+    fig.tight_layout(); fig.savefig(out_dir / "distribuciones_validacion.png", dpi=180); plt.close(fig)
 
     elapsed = time.perf_counter() - t0
     ver = json.loads((ROOT / "results/verificacion_datos_procesados.json").read_text(encoding="utf-8"))
@@ -192,11 +201,11 @@ def main() -> None:
         "limitacion_temporal_preprocesador": "El preprocesador compartido fue ajustado con entrenamiento aleatorio y pudo incorporar filas de validación temporal; persiste la limitación conocida.",
         "versiones": {"python": sys.version.split()[0], "torch": torch.__version__, "numpy": np.__version__, "pandas": pd.__version__, "scikit_learn": __import__("sklearn").__version__},
         "hashes_entrada": hashes,
-        "hash_modelos": {p.name: sha256(p) for p in sorted(MODELS.glob("*.pt"))},
+        "hash_modelos": {p.name: sha256(p) for p in sorted(model_dir.glob("*.pt"))},
     }
-    (OUT / "resumen_piloto.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
+    (out_dir / "resumen_piloto.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps({"n_corridas": len(metrics_df), "tiempo_entrenamiento_s": elapsed_train,
-                      "tiempo_pared_s": elapsed, "resultados": str(OUT)}, ensure_ascii=False, indent=2))
+                      "tiempo_pared_s": elapsed, "resultados": str(out_dir)}, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":

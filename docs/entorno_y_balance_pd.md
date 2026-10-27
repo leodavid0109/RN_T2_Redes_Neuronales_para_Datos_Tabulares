@@ -11,7 +11,7 @@ Fecha de verificación: 25 de octubre de 2026. Las verificaciones de datos y mod
 - `py -0p` solo mostró Python 3.14 instalado para el lanzador de Windows; el comando `python` apuntaba al alias de Microsoft Store y no iniciaba Python.
 - El runtime local de Codex proporcionó Python 3.12.14 en `C:\Users\david\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe`. Ese intérprete creó `.venv`; su `pyvenv.cfg` confirma Python 3.12.14.
 - Los JSON existentes registran que los resultados/modelos se generaron con Python 3.10.12, NumPy 2.2.6, pandas 2.3.3, SciPy 1.15.3, scikit-learn 1.7.2, pyarrow 25.0.1 y joblib 1.6.0. Se mantuvieron esas versiones de ciencia de datos.
-- Inspeccioné imports en `src/`, `scripts/` y `tests/`. Añadí matplotlib para las figuras, PyYAML para la configuración de scorecard, openpyxl para leer el diccionario y PyTorch para los MLP. No añadí dependencias de app porque no hay código de aplicación. La prueba existente se ejecuta directamente, por eso no se añadió pytest.
+- En la fecha de esta instalación inspeccioné imports en `src/`, `scripts/` y `tests/`. Se añadieron matplotlib, PyYAML, openpyxl y PyTorch para los usos del repositorio de entonces. La aplicación Streamlit llegó después en `app/app.py`; `streamlit==1.66.1` y las versiones resueltas de sus dependencias transitivas quedaron fijadas en `requirements.txt`, mientras que `app/requirements.txt` enumera las dependencias directas de la interfaz. La prueba existente se ejecuta directamente, por eso no se añadió pytest.
 
 ### Instalación realizada
 
@@ -115,7 +115,7 @@ No se recomienda submuestrear de entrada: descartaría datos mayoritarios dispon
 - **B (protocolo/redes):** decide si compara el MLP con y sin ponderación/remuestreo; contabiliza esa configuración en búsqueda/tiempos/semillas y evalúa con métricas de discriminación y calibración.
 - **Cambio compartido:** si se quiere afirmar que el efecto de balanceo es comparable entre familias, coordinar con quien implementa la logística una referencia ponderada correspondiente. A y B deben usar exactamente las mismas particiones, transformación y definición de pesos; las predicciones de ambos tratamientos se evalúan sobre datos naturales. C integra el contrato de configuración/resultados y el reporte.
 
-## MLP de probabilidad de incumplimiento (Persona B)
+## MLP de probabilidad de incumplimiento
 
 ### Decisión comunicada sobre el preprocesador de A
 
