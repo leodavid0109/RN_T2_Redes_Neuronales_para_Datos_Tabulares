@@ -1,5 +1,5 @@
 """Extensión validation-only de un candidato LGD que alcanzó el máximo de épocas."""
-import hashlib, json, os, sys, time
+import argparse, hashlib, json, os, sys, time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,7 +22,14 @@ def digest(path):
 
 
 def main():
-    for p in (OUT, MODELS):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output-dir", default=str(OUT.relative_to(ROOT)))
+    parser.add_argument("--models-dir", default=str(MODELS.relative_to(ROOT)))
+    args = parser.parse_args()
+    out_dir, model_dir = Path(args.output_dir), Path(args.models_dir)
+    if not out_dir.is_absolute(): out_dir = ROOT / out_dir
+    if not model_dir.is_absolute(): model_dir = ROOT / model_dir
+    for p in (out_dir, model_dir):
         if p.exists() and any(p.iterdir()): raise FileExistsError(f"No sobrescribo {p}")
     cfgpath = ROOT / "configs/mlp_lgd_search_extension.yaml"
     cfg = yaml.safe_load(cfgpath.read_text(encoding="utf-8"))
@@ -69,29 +76,29 @@ def main():
             "media_predicha":float(pred.mean()),"media_observada":float(obs.mean()),**metricas_lgd(obs,pred)})
         preds.append(pd.DataFrame({"id":data.iloc[vi].id.to_numpy(),"semilla":seed,
             "lgd_observada":obs,"lgd_predicha":pred}))
-        MODELS.mkdir(parents=True,exist_ok=True)
+        model_dir.mkdir(parents=True,exist_ok=True)
         torch.save({"state_dict":run["state_dict"],"input_dim":int(x.shape[1]),"input_columns":cols,
             "config":candidate,"seed":seed,"partition":"aleatoria","best_epoch":run["best_epoch"],
             "epochs_run":run["epochs_run"],"parameters":run["parameters"],"hashes_input":hashes},
-            MODELS/f"{candidate['id']}_seed_{seed}.pt")
-    OUT.mkdir(parents=True,exist_ok=True)
-    pd.DataFrame(rows).to_csv(OUT/"metricas_validacion.csv",index=False)
-    pd.concat(preds,ignore_index=True).to_parquet(OUT/"predicciones_validacion.parquet",index=False)
-    (OUT/"trayectorias_por_epoca.json").write_text(json.dumps(histories,indent=2),encoding="utf-8")
+            model_dir/f"{candidate['id']}_seed_{seed}.pt")
+    out_dir.mkdir(parents=True,exist_ok=True)
+    pd.DataFrame(rows).to_csv(out_dir/"metricas_validacion.csv",index=False)
+    pd.concat(preds,ignore_index=True).to_parquet(out_dir/"predicciones_validacion.parquet",index=False)
+    (out_dir/"trayectorias_por_epoca.json").write_text(json.dumps(histories,indent=2),encoding="utf-8")
     fig,ax=plt.subplots(figsize=(9,5))
     for key,h in histories.items(): ax.plot([v["epoch"] for v in h],[v["valid_rmse"] for v in h],label=key)
     for name in ("ridge","media_train"):
         r=base_metrics.loc[(base_metrics.particion=="aleatoria")&(base_metrics.conjunto=="validacion")&(base_metrics.modelo==name)].iloc[0]
         ax.axhline(r.rmse,ls="--" if name=="ridge" else ":",label=f"{name} validación")
     ax.set(xlabel="Época",ylabel="RMSE validación",title="Extensión del contraste de inicialización")
-    ax.legend();fig.tight_layout();fig.savefig(OUT/"curvas_extension_validacion.png",dpi=180);plt.close(fig)
+    ax.legend();fig.tight_layout();fig.savefig(out_dir/"curvas_extension_validacion.png",dpi=180);plt.close(fig)
     summary={"status":"validation_only_extension_no_final", "metrics_test_calculated":False,
         "reason":"Las dos semillas base con inicialización PyTorch alcanzaron la época máxima 100; repetidas desde inicio con máximo 160.",
         "config":cfg,"candidate":candidate,"results":rows,"training_seconds":train_time,
         "wall_seconds":time.perf_counter()-t0,"input_hashes":hashes,
         "versions":{"python":sys.version.split()[0],"torch":torch.__version__,"numpy":np.__version__,"pandas":pd.__version__}}
-    (OUT/"resumen_extension.json").write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding="utf-8")
-    print(json.dumps({"runs":len(rows),"results":str(OUT),"training_seconds":train_time,
+    (out_dir/"resumen_extension.json").write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding="utf-8")
+    print(json.dumps({"runs":len(rows),"results":str(out_dir),"training_seconds":train_time,
         "wall_seconds":summary["wall_seconds"],"epochs":[r["epocas_ejecutadas"] for r in rows],
         "best_epochs":[r["epoca_mejor"] for r in rows]},indent=2))
 

@@ -1,8 +1,8 @@
-# LGD: auditoría del Ridge y arranque del MLP de Persona B
+# LGD: auditoría del baseline y MLP
 
 ## Alcance y estado
 
-Este trabajo añade un MLP demo separado; no modifica los artefactos, scripts ni resultados de C. El modelo principal existente sigue siendo Ridge en `models/lgd_lineal_{aleatoria,temporal}.joblib`. La salida del MLP vive en `models/lgd_mlp_demo/` y `results/lgd_mlp_demo/`; no se enchufa aún a la pérdida esperada.
+Esta página conserva la auditoría de datos y Ridge realizada antes de la búsqueda. El estado actual del MLP final, su selección, las 30 semillas, la comparación de prueba y sus límites está en [`mlp_lgd_final.md`](mlp_lgd_final.md); el protocolo y los diez candidatos están en [`mlp_lgd_busqueda.md`](mlp_lgd_busqueda.md). Los artefactos demo/piloto son históricos y no sustituyen los resultados finales v2. `src/perdida_esperada.py` ahora ofrece el modo `--modelo mlp` y hay artefactos de pérdida esperada MLP publicados. La aplicación Streamlit actual sigue presentando la scorecard PD y no consume LGD ni la pérdida esperada.
 
 La ejecución usa el preprocesador compartido actual. Los metadatos guardan `preprocesador_ajustado_con: entrenamiento_aleatorio`; puede haber transformado filas que pertenecen a validación/prueba temporal. Este MLP temporal es provisional por la misma limitación conocida en PD. La decisión del equipo de conservar el preprocesador no demuestra que esté libre de fuga.
 
@@ -69,7 +69,7 @@ El artefacto compartido es un `ColumnTransformer`: imputa numéricas con mediana
 
 `src/lgd_lineal.py` filtra castigados y llama `pre.transform(df)`; no ajusta de nuevo. Comprobé que el MLP produce una matriz densa finita `(46.009, 99)` con las mismas columnas, y que los conjuntos de IDs de entrenamiento, validación y prueba de ambos protocolos coinciden exactamente con `results/lgd_lineal_pred.parquet`. Para ser comparable, el MLP reutiliza ese filtro, el orden de variables, el preprocesador y las máscaras; no debe volver a ajustar escalado/imputación.
 
-El preprocesador se ajustó con entrenamiento aleatorio. Como las filas de temporal se solapan con las particiones aleatorias, su ajuste pudo incluir filas temporales de validación/prueba. La evaluación temporal de Ridge y MLP mantiene esta limitación metodológica hasta que el equipo decida/regenera otro preprocesador; no se interpreta como ausencia de fuga.
+El preprocesador se ajustó con entrenamiento aleatorio. Como las filas temporales se solapan con las particiones aleatorias, su ajuste pudo incluir filas temporales de validación/prueba. El equipo comunicó que probó una alternativa y decidió conservar el preprocesador vigente; no hay informe, datos ni métricas de esa evaluación en el repositorio. La decisión de conservarlo no demuestra que esté libre de fuga. Esta limitación sigue afectando la interpretación temporal de Ridge y MLP.
 
 ## Ridge y referencia de media
 
@@ -94,17 +94,17 @@ En aleatoria, Ridge gana a la media por márgenes pequeños. En temporal, la med
 
 ## Pérdida esperada y contrato de integración
 
-`src/perdida_esperada.py` calcula por crédito `perdida_esperada = pd_hat * lgd_hat * funded_amnt`, donde PD viene de logística y LGD de Ridge recortado; usa `funded_amnt` al otorgamiento como EAD disponible en decisión. Para pérdidas realizadas en incumplidos usa `LGD_obs * ead`, con ead residual calculado desde el principal recibido. Es decir, el EAD de la pérdida esperada está en origen y el de la pérdida realizada al incumplir; el código describe el primero como conservador porque hubo amortización. El desfase entre definiciones debe hacerse explícito al presentar resultados.
+`src/perdida_esperada.py` calcula por crédito `perdida_esperada = pd_hat * lgd_hat * funded_amnt`. En modo `referencia`, PD viene de logística y LGD de Ridge recortado; en modo `mlp`, promedia las semillas guardadas de MLP para PD y LGD. Usa `funded_amnt` al otorgamiento como EAD disponible en decisión. Para pérdidas realizadas en incumplidos usa `LGD_obs * ead`, con ead residual calculado desde el principal recibido. Es decir, el EAD de la pérdida esperada está en origen y el de la pérdida realizada al incumplir; el código describe el primero como conservador porque hubo amortización. El desfase entre definiciones debe hacerse explícito al presentar resultados.
 
-La salida crea `results/perdida_esperada_{particion}.parquet`, una tabla de deciles y un JSON con totales. En prueba aleatoria reporta pérdida esperada 119,49 M, realizada mínima 70,86 M y máxima 92,98 M; temporal, 102,53 M, 38,67 M y 110,24 M. Son cifras de los artefactos actuales, afectadas por el límite de censura/missing señalado arriba y por el preprocesador temporal. `src/perdida_esperada.py` espera un Ridge en `models/lgd_lineal_<particion>.joblib` y no ofrece una interfaz genérica de modelos. La app/comparador no debe cambiarse para consumir el MLP hasta terminar su búsqueda y corridas finales, y coordinar el contrato de carga con C.
+El modo de referencia escribe `results/perdida_esperada_{particion}.parquet`; el modo MLP añade el sufijo `_mlp` y promedia las semillas solicitadas (30 por defecto). Los resúmenes canónicos distinguen ambas salidas. Las cifras son sensibles a la censura/missing señalados arriba y a la limitación temporal del preprocesador. La opción MLP se integró después de terminar búsqueda y fase final; sus rutas de checkpoints son fijas en el módulo y requieren esos modelos presentes. La aplicación Streamlit aún no muestra estos resultados.
 
 Hay además una inconsistencia menor: la ayuda superior de `src/perdida_esperada.py` indica `src/expected_loss.py`, pero el archivo real/comando correcto es `src/perdida_esperada.py`.
 
 ## Decisión de salida y pérdida para el MLP
 
-El objetivo es una fracción continua acotada con una masa real grande en LGD=1 (46,36 % de los castigados) y solo 0,09 % en LGD=0. Propongo sigmoid en la salida, de modo que la predicción esté en [0,1], y MSE como pérdida inicial. Con MSE, el predictor óptimo aproxima la media condicional de LGD, que es la cantidad que entra en `PD × LGD × EAD`, y alinea el entrenamiento con RMSE, métrica usada por Ridge. MAE, RMSE, sesgo y R² siguen reportándose con la función común.
+El objetivo es una fracción continua acotada con una masa real grande en LGD=1 (46,36 % de los castigados) y solo 0,09 % en LGD=0. El modelo final conserva sigmoid en la salida, para limitar la predicción a [0,1], y MSE como pérdida. Bajo MSE, el predictor óptimo aproxima la media condicional de LGD, que es la cantidad que entra en `PD × LGD × EAD`, y alinea el entrenamiento con RMSE, métrica usada por Ridge. MAE, RMSE, sesgo y R² se reportan con la función común.
 
-La sigmoid no produce exactamente 0 ni 1 en aritmética finita; MSE no estima explícitamente la probabilidad de pertenecer a la masa puntual en 1. Por eso esta demo busca primero una media condicional útil, no una distribución predictiva completa. Una extensión posible es un modelo de dos partes (clasificador de recuperación completa + regresor para severidad <1) o una familia zero/one-inflated apropiada. No usaría Beta ordinaria sin tratar las masas en los extremos. La elección de MSE+sigmoid es una hipótesis de baseline, no una decisión final del informe.
+La sigmoid no produce exactamente 0 ni 1 en aritmética finita; MSE no estima explícitamente la probabilidad de pertenecer a la masa puntual en 1. Así, la red estima una media condicional acotada, no una distribución predictiva completa. Una extensión posible es un modelo de dos partes (clasificador de recuperación completa + regresor para severidad <1) o una familia zero/one-inflated apropiada. No se debe usar Beta ordinaria sin tratar las masas en los extremos. La discusión empírica de esta decisión está en [`mlp_lgd_final.md`](mlp_lgd_final.md).
 
 ## Demo implementada y límites
 
@@ -126,20 +126,20 @@ Las dos épocas bajan RMSE entre época 1 y 2, pero la red sigue prediciendo muy
 Comando desde raíz, con `.venv`:
 
 ```powershell
-.\.venv\Scripts\python.exe scripts/16_entrenar_mlp_lgd.py
+.\.venv\Scripts\python.exe scripts/16_entrenar_mlp_lgd.py --output-dir results/lgd_mlp_demo_reproduccion --models-dir models/lgd_mlp_demo_reproduccion
 ```
 
 ```bash
-python scripts/16_entrenar_mlp_lgd.py
+python scripts/16_entrenar_mlp_lgd.py --output-dir results/lgd_mlp_demo_reproduccion --models-dir models/lgd_mlp_demo_reproduccion
 ```
 
 No sobrescribe salidas existentes; para repetir, pasa `--output-dir` y `--models-dir` nuevos. La demo verifica la integración y ofrece una comparación exploratoria de validación; dos épocas y una semilla no son evaluación final. No se modificó el trabajo de C.
 
-## Búsqueda y corridas finales pendientes
+## Estado de búsqueda y corridas finales
 
-El YAML documenta nueve variantes: base; cambio aislado de anchura, profundidad, activación, dropout, weight decay, optimizador (emparejado con decay) y dos tasas. Protocolo planeado: 2 semillas exploratorias × 9 configuraciones × 2 particiones = 36 ajustes, máximo 16 épocas, batch 2.048, paciencia 4, presupuesto CPU 30 min. Elegir por menor RMSE medio de validación dentro de cada partición; no mezclar aleatoria y temporal. Reportar MAE, RMSE, sesgo, R², distribución/residuos y tiempo/épocas/parámetros. Test permanece intacto hasta fijar configuraciones.
+La búsqueda está en `results/lgd_mlp_search_v1/`: diez configuraciones, dos semillas exploratorias y dos particiones. Las 30 semillas finales por partición están en `results/lgd_mlp_final_v2/`; los 60 checkpoints están en `models/lgd_mlp_final_v2/`. La selección fue por RMSE medio de validación separado por partición, sin usar prueba. La configuración aleatoria es `base32_relu_adam`; la temporal es `learning_rate_003`. Los resultados y la discusión están en los documentos enlazados arriba.
 
-Después de fijar una configuración por partición, ejecutar 30 semillas (0–29) para ambas particiones, 60 ajustes, presupuesto CPU 45 min. Resumir media, desviación, mejor y peor de MAE/RMSE/sesgo/R² en validación y prueba; no reajustar según test. El CPU observado es Windows con PyTorch `2.8.0+cpu`, dos hilos. La arquitectura base tiene **3.233** parámetros (99→32→1 más biases); la variante 64 tiene 6.465; [32,16] tiene 3.745. La demo mide el costo de dos épocas completas y permitirá ajustar presupuestos antes de implementar la búsqueda/final. Actualmente búsqueda y 30 semillas no están implementadas ni ejecutadas.
+El contrato del consumidor de pérdida esperada sigue apuntando a Ridge en `models/lgd_lineal_{aleatoria,temporal}.joblib`. Integrar la red requiere acordar el formato para cargar uno o agregar sus 30 modelos, definir cuál predicción usar y comparar la pérdida esperada resultante; no se ha hecho.
 
 ## Estado de requisitos
 
@@ -151,7 +151,8 @@ Después de fijar una configuración por partición, ejecutar 30 semillas (0–2
 | Ridge y media de train | Hecho | Modelos, CSV, predicciones y métricas leídos; temporalmente media gana ligeramente. |
 | Lista exacta de alphas Ridge | Pendiente | Resumen dice ocho; fuente da seis por defecto; alpha temporal 100.000. |
 | MLP configurable y demo | Hecho tras ejecución | Código/config nuevos, validation-only, artefactos nuevos; resultados demo no finales. |
-| Búsqueda MLP / 30 semillas | Pendiente | Diseño documentado, todavía no ejecutado. |
-| Uso del MLP en expected-loss/app | Pendiente | Consumidor actual está acoplado a `.joblib` Ridge; coordinar contrato con C. |
+| Búsqueda MLP / 30 semillas | Hecho | `docs/mlp_lgd_busqueda.md`, `docs/mlp_lgd_final.md` y artefactos v2; hashes verificados antes de la fase final. |
+| Uso del MLP en pérdida esperada | Hecho con límites | `src/perdida_esperada.py --modelo mlp` carga los 30 checkpoints PD/LGD y genera parquets, deciles y resumen; las salidas MLP están versionadas. La métrica/validación conserva las limitaciones de censura y preprocesador. |
+| Mostrar pérdida esperada en la app | Pendiente | `app/app.py` consume la scorecard PD y no presenta las tablas/parquets de pérdida esperada ni LGD MLP. |
 | Fuga temporal del preprocesador | Parcial/limitación abierta | Base registrada `entrenamiento_aleatorio`; no prueba ausencia de fuga temporal. |
 | Cota superior de pérdida realizada | Parcial | 5 filas PD=1 sin LGD; en test son 1 aleatoria y 2 temporal y se contabilizan como censurados con pérdida cero. |

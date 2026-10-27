@@ -8,7 +8,7 @@ PyTorch está fijado a la distribución **CPU** (`2.8.0+cpu`). El equipo de desa
 
 La integración de LGD y pérdida esperada usa NumPy, pandas, SciPy, scikit-learn, pyarrow, joblib y matplotlib, ya incluidos en este conjunto fijo; no requiere paquetes adicionales. Se conservan las versiones verificadas con los artefactos existentes en lugar de cambiar el entorno al resolver el `requirements.txt` de ambos frentes.
 
-No hay todavía código de aplicación web, por lo que no se agregan dependencias de interfaz. `pytest` tampoco es necesario para la prueba actual: `tests/test_scorecard.py` puede ejecutarse directamente con Python.
+La aplicación Streamlit está en `app/app.py` y sus dependencias se fijan en `app/requirements.txt` (Streamlit también está en el entorno completo de `requirements.txt`). La interfaz actual presenta la scorecard de PD; no consume todavía la pérdida esperada ni los MLP. `pytest` no es necesario para la prueba actual: `tests/test_scorecard.py` puede ejecutarse directamente con Python.
 
 ### Windows (PowerShell)
 
@@ -81,16 +81,16 @@ El script de balance reporta ambas clases en cada partición. La validación y p
 
 Las versiones fijadas, comandos ejecutados, prueba de scorecard, lectura del parquet, carga de modelos y balance de clases quedan documentados en [`docs/entorno_y_balance_pd.md`](docs/entorno_y_balance_pd.md). Los resultados no deben regenerarse solo para hacer pasar una validación.
 
-## MLP de probabilidad de incumplimiento (Persona B)
+## MLP de probabilidad de incumplimiento
 
 El protocolo, sus límites, la decisión comunicada sobre el preprocesador y los comandos están en [`docs/entorno_y_balance_pd.md`](docs/entorno_y_balance_pd.md). La demo carga el mismo parquet/preprocesador que la logística y verifica ejecución e integración; no desempeño final. La búsqueda selecciona por separado dentro de cada partición y no usa prueba. Se conserva el preprocesador actual por decisión comunicada del equipo; la limitación temporal permanece documentada, así que sus resultados temporales deben repetirse si A cambia el ajuste y regenera la logística. La búsqueda independiente y las 30 semillas por partición ya se ejecutaron sobre los artefactos actuales; siguen siendo provisionales para interpretación temporal por la limitación del preprocesador.
 
 ```powershell
-.\.venv\Scripts\python.exe scripts/14_entrenar_mlp_pd.py --mode demo
+.\.venv\Scripts\python.exe scripts/14_entrenar_mlp_pd.py --mode demo --output-dir results/pd_mlp_demo_reproduccion --models-dir models/pd_mlp_demo_reproduccion
 ```
 
 ```bash
-python scripts/14_entrenar_mlp_pd.py --mode demo
+python scripts/14_entrenar_mlp_pd.py --mode demo --output-dir results/pd_mlp_demo_reproduccion --models-dir models/pd_mlp_demo_reproduccion
 ```
 
 La búsqueda con `--mode search` selecciona independientemente una configuración por partición y usa solo la validación de esa partición; las configuraciones pueden coincidir, como ocurrió en esta ejecución. El modo `--mode final` conserva hashes del parquet, preprocesador, modelos logísticos, protocolo, configuración y código para comprobar que la búsqueda sigue correspondiendo a los artefactos evaluados. Los resultados temporales conservan la limitación conocida del ajuste vigente del preprocesador; la decisión del equipo de mantenerlo no demuestra ausencia de fuga.
@@ -107,30 +107,44 @@ python scripts/11_tabla_comparacion_pd.py --mlp results/pd_mlp_final_reproduccio
 
 En Linux se ejecutan los mismos comandos después de activar `.venv`.
 
-## MLP de LGD (Persona B)
+## MLP de LGD
 
-La auditoría de la muestra, sus límites, el baseline Ridge y el protocolo futuro están en [`docs/mlp_lgd.md`](docs/mlp_lgd.md). El demo configurable de dos épocas usa la misma muestra castigada, transformación y máscaras de Ridge; evalúa validación solamente y no es resultado final.
+La auditoría del objetivo, la muestra, Ridge y los contratos de consumo están en [`docs/mlp_lgd.md`](docs/mlp_lgd.md). La búsqueda y sus diez variantes están en [`docs/mlp_lgd_busqueda.md`](docs/mlp_lgd_busqueda.md); los resultados finales de 30 semillas y su comparación con Ridge/media están en [`docs/mlp_lgd_final.md`](docs/mlp_lgd_final.md). La secuencia del piloto se conserva como antecedente en [`docs/mlp_lgd_convergencia.md`](docs/mlp_lgd_convergencia.md).
 
-El piloto de convergencia (dos inicializaciones × dos semillas × dos particiones, validación únicamente) y su extensión están en [`docs/mlp_lgd_convergencia.md`](docs/mlp_lgd_convergencia.md). Los resultados canónicos corregidos quedan en `results/lgd_mlp_convergencia_piloto_v2/` y `results/lgd_mlp_convergencia_extension_v2/`; no sustituyen la búsqueda ni las corridas finales.
-
-El protocolo de diez configuraciones exploratorias de LGD y su comando están en [`docs/mlp_lgd_busqueda.md`](docs/mlp_lgd_busqueda.md). La búsqueda selecciona por separado en cada partición y no calcula métricas de prueba.
+El modo demo toma la misma muestra castigada, transformación y máscaras que Ridge; usa solo entrenamiento y validación para el ajuste. Una corrida reproducible debe usar carpetas de salida nuevas:
 
 ```powershell
-.\.venv\Scripts\python.exe scripts/19_buscar_mlp_lgd.py --modo search
+.\.venv\Scripts\python.exe scripts/16_entrenar_mlp_lgd.py --output-dir results/lgd_mlp_demo_reproduccion --models-dir models/lgd_mlp_demo_reproduccion
 ```
 
-La extensión acotada de las dos semillas de inicialización PyTorch se repite con:
+La búsqueda se selecciona con RMSE de validación por partición; no calcula métricas de prueba. Para repetirla en salidas nuevas:
 
 ```powershell
-.\.venv\Scripts\python.exe scripts/20_extender_busqueda_mlp_lgd.py
+.\.venv\Scripts\python.exe scripts/19_buscar_mlp_lgd.py --modo search --output-dir results/lgd_mlp_search_reproduccion --models-dir models/lgd_mlp_search_reproduccion
 ```
 
-La fase final congelada de 30 semillas por partición y su análisis están en [`docs/mlp_lgd_final.md`](docs/mlp_lgd_final.md); se verifica el preflight antes del entrenamiento y la prueba se evalúa después de guardar los 60 checkpoints.
+La extensión de diagnóstico es opcional y usa carpetas nuevas:
 
 ```powershell
-.\.venv\Scripts\python.exe scripts/16_entrenar_mlp_lgd.py
+.\.venv\Scripts\python.exe scripts/20_extender_busqueda_mlp_lgd.py --output-dir results/lgd_mlp_search_extension_reproduccion --models-dir models/lgd_mlp_search_extension_reproduccion
 ```
 
-```bash
-python scripts/16_entrenar_mlp_lgd.py
+La fase final lee la búsqueda elegida, comprueba los hashes antes de ajustar y evalúa prueba solo después de guardar los checkpoints. Este comando usa carpetas nuevas para ambos resultados:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/21_entrenar_mlp_lgd_final.py --modo final --search-dir results/lgd_mlp_search_reproduccion --output-dir results/lgd_mlp_final_reproduccion --models-dir models/lgd_mlp_final_reproduccion
 ```
+
+Los pilotos históricos también aceptan `--output-dir` y `--models-dir`. El final canónico publicado corresponde a `results/lgd_mlp_search_v1/`, `results/lgd_mlp_search_extension_v2/` y `results/lgd_mlp_final_v2/`; para verificarlo sin entrenar, ejecuta:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/21_entrenar_mlp_lgd_final.py --modo final --search-dir results/lgd_mlp_search_v1 --preflight-only
+```
+
+Las instrucciones de repetición por fase, diferencias de hash históricos y requisitos pendientes están en [`docs/reproducibilidad_y_pendientes.md`](docs/reproducibilidad_y_pendientes.md).
+
+## Aplicación y pérdida esperada
+
+La aplicación local de Streamlit se inicia con `python run.py app` (o `python -m streamlit run app/app.py`). La interfaz actual usa la scorecard de PD para mostrar puntaje, PD, percentil y escenarios; los enlaces de reporte y video siguen siendo marcadores de posición. El cálculo por lote de pérdida esperada tiene una ruta separada: `python src/perdida_esperada.py --modelo referencia` o `--modelo mlp`. Ambos modos escriben en rutas canónicas de `results/`; consulta `run.py --help` y respalda esos resultados antes de repetirlos. La matriz de reproducibilidad distingue artefactos generados de una integración visible en la app.
+
+**Precaución con el combo `python run.py demo`:** su implementación borra y regenera `results/demo/pd_mlp`, `models/demo/pd_mlp`, `results/demo/lgd_mlp` y `models/demo/lgd_mlp`, y los pasos de Ridge/pérdida esperada escriben en rutas canónicas. Los artefactos demo existentes están versionados. Para conservarlos, usa los comandos directos con carpetas nuevas de las secciones anteriores; no uses el combo sin respaldar primero sus salidas.

@@ -38,7 +38,7 @@ def cmd(desc, pasos, acepta=False, limpiar=()):
 
 
 COMANDOS = {
-    # ---- Parte 1 (A)
+    # ---- Preparación, PD y scorecard
     "datos": cmd(
         "Genera pd.parquet y lgd.parquet desde data/raw/loan.csv "
         "(requiere el CSV original)",
@@ -88,9 +88,9 @@ COMANDOS = {
         ],
     ),
 
-    # ---- Redes neuronales (B)
+    # ---- Modelos MLP
     "pd-mlp": cmd(
-        "[Persona B] MLP de PD: --mode demo|search|final y rutas de salida nuevas",
+        "MLP de PD: --mode demo|search|final y rutas de salida nuevas",
         ["scripts/14_entrenar_mlp_pd.py"],
         acepta=True,
     ),
@@ -131,19 +131,19 @@ COMANDOS = {
     ),
 
     "lgd-mlp-busqueda": cmd(
-        "[Persona B] Búsqueda de 10 configuraciones del MLP de LGD (usar rutas nuevas)",
+        "Búsqueda de 10 configuraciones del MLP de LGD (usar rutas nuevas)",
         ["scripts/19_buscar_mlp_lgd.py"],
         acepta=True,
     ),
 
     "lgd-mlp-final": cmd(
-        "[Persona B] 30 semillas por partición del MLP de LGD "
+        "30 semillas por partición del MLP de LGD "
         "(--preflight-only verifica sin entrenar)",
         ["scripts/21_entrenar_mlp_lgd_final.py"],
         acepta=True,
     ),
 
-    # ---- Parte 2 (C)
+    # ---- LGD y pérdida esperada
     "lgd-lineal": cmd(
         "[REGENERA modelos] LGD: Ridge de referencia "
         "(admite --alphas, --demo, --seed)",
@@ -266,7 +266,7 @@ def app():
     ruta = RAIZ / "app" / "app.py"
 
     if not ruta.exists():
-        sys.exit("La aplicación todavía no existe (falta app/app.py).")
+        sys.exit("No se encontró app/app.py; revisa que el checkout incluya la aplicación.")
 
     subprocess.run(
         [

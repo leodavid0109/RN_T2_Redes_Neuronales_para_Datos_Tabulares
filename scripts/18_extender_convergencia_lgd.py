@@ -1,5 +1,5 @@
 """Extensión determinista, solo validación, del piloto de convergencia LGD."""
-import hashlib, json, os, sys, time
+import argparse, hashlib, json, os, sys, time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,7 +22,14 @@ def digest(path):
 
 
 def main():
-    for p in (OUT, MODELS):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output-dir", default=str(OUT.relative_to(ROOT)))
+    parser.add_argument("--models-dir", default=str(MODELS.relative_to(ROOT)))
+    args = parser.parse_args()
+    out_dir, model_dir = Path(args.output_dir), Path(args.models_dir)
+    if not out_dir.is_absolute(): out_dir = ROOT / out_dir
+    if not model_dir.is_absolute(): model_dir = ROOT / model_dir
+    for p in (out_dir, model_dir):
         if p.exists() and any(p.iterdir()): raise FileExistsError(f"No sobrescribo {p}")
     cfg_path = ROOT / "configs/mlp_lgd_convergencia_extension.yaml"
     cfg = yaml.safe_load(cfg_path.read_text(encoding="utf-8"))
@@ -59,28 +66,28 @@ def main():
             "parametros_entrenables":run["parameters"], "tiempo_entrenamiento_s":run["training_seconds"],
             "media_predicha":float(pred.mean()), "media_observada":float(obs.mean()), **metricas_lgd(obs,pred)})
         pred_frames.append(pd.DataFrame({"id":data.iloc[vi].id.to_numpy(), "semilla":seed, "lgd_observada":obs, "lgd_predicha":pred}))
-        MODELS.mkdir(parents=True, exist_ok=True)
+        model_dir.mkdir(parents=True, exist_ok=True)
         torch.save({"state_dict":run["state_dict"], "input_dim":int(x.shape[1]), "input_columns":cols,
             "config":cfg["model"], "seed":seed, "partition":"aleatoria", "best_epoch":run["best_epoch"],
             "epochs_run":run["epochs_run"], "parameters":run["parameters"], "hashes_input":hashes},
-            MODELS / f"aleatoria_pytorch_seed_{seed}.pt")
-    OUT.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(rows).to_csv(OUT / "metricas_validacion.csv", index=False)
-    pd.concat(pred_frames, ignore_index=True).to_parquet(OUT / "predicciones_validacion.parquet", index=False)
-    (OUT / "trayectorias_por_epoca.json").write_text(json.dumps(histories, indent=2), encoding="utf-8")
+            model_dir / f"aleatoria_pytorch_seed_{seed}.pt")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(rows).to_csv(out_dir / "metricas_validacion.csv", index=False)
+    pd.concat(pred_frames, ignore_index=True).to_parquet(out_dir / "predicciones_validacion.parquet", index=False)
+    (out_dir / "trayectorias_por_epoca.json").write_text(json.dumps(histories, indent=2), encoding="utf-8")
     fig, ax = plt.subplots(figsize=(8,5))
     for k,h in histories.items():
         ax.plot([v["epoch"] for v in h],[v["valid_rmse"] for v in h],label=k)
     ax.axhline(.09474611970124572,color="black",ls="--",label="Ridge validación")
     ax.axhline(.09543572284628865,color="gray",ls=":",label="Media train validación")
     ax.set(xlabel="Época",ylabel="RMSE validación",title="Extensión aleatoria: inicialización PyTorch")
-    ax.legend(); fig.tight_layout(); fig.savefig(OUT / "curvas_extension_validacion.png",dpi=180); plt.close(fig)
+    ax.legend(); fig.tight_layout(); fig.savefig(out_dir / "curvas_extension_validacion.png",dpi=180); plt.close(fig)
     summary={"estado":"extension_exploratoria_no_final_validation_only", "no_se_calcularon_metricas_prueba":True,
         "motivo":"Dos corridas del piloto agotaron 60 épocas; se repiten desde inicio con máximo 90 porque no se guardó estado Adam.",
         "configuracion":cfg,"resultados":rows,"tiempo_entrenamiento_s":total_train,"tiempo_pared_s":time.perf_counter()-t0,
         "budget_seconds":cfg["budget_seconds"],"hashes_entrada":hashes,
         "versiones":{"python":sys.version.split()[0],"torch":torch.__version__,"numpy":np.__version__,"pandas":pd.__version__}}
-    (OUT / "resumen_extension.json").write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding="utf-8")
-    print(json.dumps({"corridas":len(rows),"tiempo_entrenamiento_s":total_train,"tiempo_pared_s":summary["tiempo_pared_s"],"salida":str(OUT)},indent=2))
+    (out_dir / "resumen_extension.json").write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding="utf-8")
+    print(json.dumps({"corridas":len(rows),"tiempo_entrenamiento_s":total_train,"tiempo_pared_s":summary["tiempo_pared_s"],"salida":str(out_dir)},indent=2))
 
 if __name__ == "__main__": main()
