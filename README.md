@@ -81,7 +81,7 @@ El script de balance reporta ambas clases en cada partición. La validación y p
 
 Las versiones fijadas, comandos ejecutados, prueba de scorecard, lectura del parquet, carga de modelos y balance de clases quedan documentados en [`docs/entorno_y_balance_pd.md`](docs/entorno_y_balance_pd.md). Los resultados no deben regenerarse solo para hacer pasar una validación.
 
-## MLP de probabilidad de incumplimiento (Persona B)
+## MLP de probabilidad de incumplimiento
 
 El protocolo, sus límites, la decisión comunicada sobre el preprocesador y los comandos están en [`docs/entorno_y_balance_pd.md`](docs/entorno_y_balance_pd.md). La demo carga el mismo parquet/preprocesador que la logística y verifica ejecución e integración; no desempeño final. La búsqueda selecciona por separado dentro de cada partición y no usa prueba. Se conserva el preprocesador actual por decisión comunicada del equipo; la limitación temporal permanece documentada, así que sus resultados temporales deben repetirse si A cambia el ajuste y regenera la logística. La búsqueda independiente y las 30 semillas por partición ya se ejecutaron sobre los artefactos actuales; siguen siendo provisionales para interpretación temporal por la limitación del preprocesador.
 
@@ -97,6 +97,8 @@ La búsqueda con `--mode search` selecciona independientemente una configuració
 
 La comparación PD reporta por separado búsqueda, corridas finales globales y sumas calculables; el tiempo de entrenamiento final del MLP no está desglosado por partición. Una sensibilidad posterior con `pos_weight` (control 1, peso 2 y cociente de clases de train) está documentada en `docs/entorno_y_balance_pd.md`; no reemplaza el modelo principal y sus pruebas no se usan para elegir pesos.
 
+La [interpretabilidad de la MLP de PD](docs/mlp_pd_interpretabilidad.md) usa importancia por permutación agrupada y contrastes descriptivos H1–H8 exclusivamente en validación. Incluye resultados por partición, límites del método y comandos para reproducirlos sin reentrenar.
+
 Reproducción en carpetas de salida nuevas (el script no sobrescribe resultados existentes):
 
 ```powershell
@@ -107,7 +109,7 @@ python scripts/11_tabla_comparacion_pd.py --mlp results/pd_mlp_final_reproduccio
 
 En Linux se ejecutan los mismos comandos después de activar `.venv`.
 
-## MLP de LGD (Persona B)
+## MLP de LGD
 
 La auditoría de la muestra, sus límites, el baseline Ridge y el protocolo futuro están en [`docs/mlp_lgd.md`](docs/mlp_lgd.md). El demo configurable de dos épocas usa la misma muestra castigada, transformación y máscaras de Ridge; evalúa validación solamente y no es resultado final.
 

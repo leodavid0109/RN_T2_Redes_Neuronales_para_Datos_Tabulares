@@ -1,0 +1,269 @@
+{
+  "metodo": "permutación agrupada en validación; impacto principal = delta log-loss del promedio de checkpoints 0-29",
+  "repeticiones": 5,
+  "semillas_modelo": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "semilla_permutacion": 20261027,
+  "grupos": {
+    "mths_since_last_delinq": [
+      "mths_since_last_delinq",
+      "falta_mths_since_last_delinq"
+    ],
+    "mths_since_last_record": [
+      "mths_since_last_record",
+      "falta_mths_since_last_record"
+    ],
+    "tot_coll_amt": [
+      "tot_coll_amt",
+      "falta_tot_coll_amt"
+    ],
+    "tot_cur_bal": [
+      "tot_cur_bal",
+      "falta_tot_cur_bal"
+    ],
+    "total_rev_hi_lim": [
+      "total_rev_hi_lim",
+      "falta_total_rev_hi_lim"
+    ],
+    "loan_amnt": [
+      "loan_amnt"
+    ],
+    "term_meses": [
+      "term_meses"
+    ],
+    "emp_length_anios": [
+      "emp_length_anios"
+    ],
+    "annual_inc": [
+      "annual_inc"
+    ],
+    "dti": [
+      "dti"
+    ],
+    "delinq_2yrs": [
+      "delinq_2yrs"
+    ],
+    "antiguedad_cred_meses": [
+      "antiguedad_cred_meses"
+    ],
+    "inq_last_6mths": [
+      "inq_last_6mths"
+    ],
+    "open_acc": [
+      "open_acc"
+    ],
+    "pub_rec": [
+      "pub_rec"
+    ],
+    "revol_bal": [
+      "revol_bal"
+    ],
+    "revol_util": [
+      "revol_util"
+    ],
+    "total_acc": [
+      "total_acc"
+    ],
+    "acc_now_delinq": [
+      "acc_now_delinq"
+    ],
+    "collections_12_mths_ex_med": [
+      "collections_12_mths_ex_med"
+    ],
+    "home_ownership": [
+      "home_ownership_ANY",
+      "home_ownership_MORTGAGE",
+      "home_ownership_NONE",
+      "home_ownership_OTHER",
+      "home_ownership_OWN",
+      "home_ownership_RENT"
+    ],
+    "verification_status": [
+      "verification_status_Not Verified",
+      "verification_status_Source Verified",
+      "verification_status_Verified"
+    ],
+    "purpose": [
+      "purpose_car",
+      "purpose_credit_card",
+      "purpose_debt_consolidation",
+      "purpose_educational",
+      "purpose_home_improvement",
+      "purpose_house",
+      "purpose_major_purchase",
+      "purpose_medical",
+      "purpose_moving",
+      "purpose_other",
+      "purpose_renewable_energy",
+      "purpose_small_business",
+      "purpose_vacation",
+      "purpose_wedding"
+    ],
+    "addr_state": [
+      "addr_state_AK",
+      "addr_state_AL",
+      "addr_state_AR",
+      "addr_state_AZ",
+      "addr_state_CA",
+      "addr_state_CO",
+      "addr_state_CT",
+      "addr_state_DC",
+      "addr_state_DE",
+      "addr_state_FL",
+      "addr_state_GA",
+      "addr_state_HI",
+      "addr_state_IA",
+      "addr_state_ID",
+      "addr_state_IL",
+      "addr_state_IN",
+      "addr_state_KS",
+      "addr_state_KY",
+      "addr_state_LA",
+      "addr_state_MA",
+      "addr_state_MD",
+      "addr_state_ME",
+      "addr_state_MI",
+      "addr_state_MN",
+      "addr_state_MO",
+      "addr_state_MS",
+      "addr_state_MT",
+      "addr_state_NC",
+      "addr_state_ND",
+      "addr_state_NE",
+      "addr_state_NH",
+      "addr_state_NJ",
+      "addr_state_NM",
+      "addr_state_NV",
+      "addr_state_NY",
+      "addr_state_OH",
+      "addr_state_OK",
+      "addr_state_OR",
+      "addr_state_PA",
+      "addr_state_RI",
+      "addr_state_SC",
+      "addr_state_SD",
+      "addr_state_TN",
+      "addr_state_TX",
+      "addr_state_UT",
+      "addr_state_VA",
+      "addr_state_VT",
+      "addr_state_WA",
+      "addr_state_WI",
+      "addr_state_WV",
+      "addr_state_WY"
+    ]
+  },
+  "particiones_independientes": true,
+  "prueba_consultada_para_resultados": false,
+  "parquet_completo_cargado": true,
+  "limitaciones": [
+    "Importancia predictiva, no causal; la correlación puede repartir u ocultar importancia.",
+    "La evaluación temporal conserva la limitación del preprocesador ajustado con entrenamiento aleatorio.",
+    "Las columnas one-hot se permutan juntas y los indicadores con su variable base."
+  ],
+  "tiempo_s": 109.576,
+  "cpu_threads": 2,
+  "versions": {
+    "python": "3.12.14",
+    "torch": "2.8.0+cpu",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3"
+  },
+  "hashes": {
+    "scripts/24_interpretabilidad_mlp_pd.py": "450bffc5036f549e2400b99fe7cdd08a4ca99549ed78421c02e1876be11f525c",
+    "src/mlp_pd.py": "a4b4f9b9f80a6c6e7085916848b181d982eec84a168363e6d6638d8f366859be",
+    "data/processed/pd.parquet": "636d23461ef3306d5629d2ce44825b13277cb04272cf2e32b9be694ee8849a24",
+    "models/preprocessor.joblib": "be8a67e93aa423f2c6b542b25ebbc582853cf4bcd9043e098ea9cad7b202a073",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_0.pt": "92ff0397e48de1c23f4171b6f880370b4221cd174db0d8b2645931f11c66e967",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_1.pt": "1381a96ae87b37030ebf1d0d4a5c18bd33b4d999c165b2a10411fd68b6c46511",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_2.pt": "ffb3453bbaa684d20f509152b756cf5523676daa92aa18263ecdd8effdcd8a93",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_3.pt": "0beda79db94cd7c7828a6d582fa7a88fcdf9650eb9c8441532ff6308f601a998",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_4.pt": "6104b46ad2e18490cfe68889e82028232c2d5bc8fee5d9da26c452994819e8a8",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_5.pt": "ab6b08b9955ef76121f64144a747637f5dba14c9fb95b6038dca4f49cc6fb661",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_6.pt": "648c659ecda1120523a62be3424554c6f49d92108f4698c683776f4a5e996172",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_7.pt": "c61ca834fc1b20cf3715263245e549f85b48fdfb5d9f393811c2f69a739a9d7b",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_8.pt": "8b78d60f5aac9eb52ee48c51f35c98e54ac564779c5527f9c96ea7375add6869",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_9.pt": "ca9075965f1c4af92556a764a444a842933d989c86ec9a4559ec305578b58e3b",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_10.pt": "6ba883bf30ec003cbd6ed40fbec07c7ab7ea6c8fbc44d3010763ad537fdefc4d",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_11.pt": "d1c2598fb84f6c5a4757cb4f1f30e06913eec5ce87f1f0835dca3b49d4613255",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_12.pt": "855351dcd0b350208ebc13bda3e0269eee1eb6f3019d07db1c3604e3144ce2b8",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_13.pt": "a0c85a92e5ce49cc1559ee3cfbbc7c0e596d52b97748e668b4f9f32ca58dd02e",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_14.pt": "3af1ad76365356ec19326e7456aaf320c435014ee919df25193f073eb7726883",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_15.pt": "9437008ba6b5f8aeaf90f2b4b514e7d6acf9fc74b910d4677fd3078d086f4394",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_16.pt": "6a271ded93317ae1d8cada1be7788b2f65f2132e69535b770ad492b9f322e786",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_17.pt": "829300d1f75da0a6b192901015f12797c773cd44a09dd48e344b253b7920ce79",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_18.pt": "404792b4aee57a6b34204f3bceb3d6ec83f87b9371e28cbfb2c8875634003c5f",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_19.pt": "2e6e849133b7754a021bc50f5df54287be53b6d2214686cfe38d261ae2f0677d",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_20.pt": "275fa349b5dd63342be3afc91c7884e36f2c81b7c46b733346c343a8eb3ea29d",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_21.pt": "44fabdb504920655798f77aa107a8703a7d0e109f63fd033fa51aa83172c0374",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_22.pt": "5c6ad96eaf195b312b42e307afdc94ef17b62ac43554efbae92d8d15c855af8a",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_23.pt": "26a7b0f12af1e5be3fb9813d00b24b3b8bd5ea0bd1b0c60a2d77e5d3ad69995a",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_24.pt": "f029b3b5d143be5eb0a93ee244a0a00dcf24cf44e5e64cc399e0bf8d39a8d568",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_25.pt": "84872f36b1316a3b2df8b7c17e4fc4fb8519bf3f414ea1854a572eb231ae6fe5",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_26.pt": "224ff04621606e81497a8302125d4071feb624bdf85d940507fefb741259caac",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_27.pt": "959da57baa4caf1b23bac59bd0f34c10100aa3afc401c5a5d6475020a8147360",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_28.pt": "f695d52840217a1a7eb2c686128ed016de0ea7bc14c37c565123091574e3ba87",
+    "models/pd_mlp_final_particionado/pd_mlp_aleatoria_final_seed_29.pt": "fe0f871fbc55ea6541f50536e543e1dd8776b862ff5b12b2988cd26a0d3fb0cd",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_0.pt": "d3f43a9d22541a62a29a87e51f916452f6184aa2caee87e973319c1fd22de7d0",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_1.pt": "4e9553e66a49c85ec08be23dc7df849a47749a10a3fa7abc261ecd09a6940d71",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_2.pt": "df5475756ef9e4e57638eb38ad3c1dfde1cc95214b3afcf0fdcf82c5720f51ce",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_3.pt": "020e43061376cf4f9478d5341d916e22f5662983ed8d6d62f438b9de18d999ef",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_4.pt": "c04364fa10c8aa8dbd3ff7a28adf271785d959bc4e3bc161078e110ae1776b7a",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_5.pt": "4d3c03aeb0474124c920d9d50b9447f9f93b06df58b5ab55fc8e7e1ddca2f3b6",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_6.pt": "1e56adf644237dc628da6c41421891573b5d90b24e05dcdffbc17e2f6510200f",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_7.pt": "acc92a49bfca150398e14f6e90bddb5d98a8f3fd0a61054fe199dac07f0fa4b1",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_8.pt": "217e3aeb30c39d186493d700d4a45f88bd961ca43080d1f7141be5927762007f",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_9.pt": "0fdd738dc0284ff65df3e3f4b5c2304675bd96bf2058d72243ec33074febda9d",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_10.pt": "6ef512bbd89bfaa1c5f791424bf1e5a1060717da8e540eb3947fe38e0e167e3c",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_11.pt": "30891513875d841be2a9faac3b531c8a915071eaff39f283c0e34ba1ef2b18c6",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_12.pt": "0b336d92864cde719c9be83201fa0d30d3c0c414e15c6ca47c3c3934a7ebc540",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_13.pt": "6381d879bc587beae930e4ce6694b2be762f4bb939b1f05076503abbc9ebf5a3",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_14.pt": "e1a9027a56a6e192900da7e94f10ae973811d88de3f9294d6a9d23ecde4ada70",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_15.pt": "9d97db077dfb188757d8a724429f94a45d3cea5c252b8e0b4a06cccee25bd893",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_16.pt": "e07dbced77ad1b4d0a8a019cc7bc1a019ba6318dbe7caa15d466a2fb1ea93fe0",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_17.pt": "d7e415b0696fb4244c3d866d5c5d903b75b4447a6f24dcc9d4be1847b0679415",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_18.pt": "72261f2f473251f792d583dcecb0fed727c52911e07fe47faa1d881bf1dbdb7e",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_19.pt": "031a00d3e9cb734f85bce29c983d8f1b171903bc08ac8ecab530f3e27e19e430",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_20.pt": "283d115bf43b222360a3f25477ebb1d8d9c655182614b1b412d8ff7918af6f51",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_21.pt": "dc43c629282d9560b016de9fabe80ce04589ca6df01ddc7744d3d58a864f8da7",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_22.pt": "f1bafef6f11452e9d013b3610abbf88c69c423d73d530406ae69ea7bd31dad1f",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_23.pt": "31ad74cb0774d535691259fc287a7744ac2c177552069987c7188d15f8419b8b",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_24.pt": "c42ddd139e5e40d2fde7485f2fde253b301c5511818debf8cd482f743ae19bab",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_25.pt": "0e65ff15d99ca212b6c4c982768d4778dc9c4ec206e3fc2057abec6a9976e026",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_26.pt": "6113cf48b7ee560fad2cc2b316a4e671c9a408f594413d487dae095e29f36a7c",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_27.pt": "6a38fb8f8e8daf82ac6c48c751900cd9e6efce8b62b18ce0350808d8c9bd2e13",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_28.pt": "0680ae3f8565f1c6ac7f85628441c7f482d8333b17c96d40badc3bf4f67cd8d2",
+    "models/pd_mlp_final_particionado/pd_mlp_temporal_final_seed_29.pt": "ea98d1d3d7263f65aab9f8e3c42b2b67c9f282aa5d00a305472370a163e3a839",
+    "results/pd_mlp_final_particionado/pd_mlp_metricas_por_semilla.csv": "81c14daed519df64b02f954d003617b7a61fdb867578f998586821a5b98fb27d"
+  }
+}

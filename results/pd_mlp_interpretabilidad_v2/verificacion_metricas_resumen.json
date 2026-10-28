@@ -1,0 +1,13 @@
+{
+  "n_corridas": 60,
+  "filas_validacion": {
+    "aleatoria": 40280,
+    "temporal": 74154
+  },
+  "tolerancia_absoluta": 1e-06,
+  "error_absoluto_maximo": 1.992184195387381e-12,
+  "pasa": true,
+  "solo_validacion": true,
+  "prueba_consultada_para_metricas": false,
+  "parquet_completo_cargado": true
+}
