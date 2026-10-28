@@ -38,7 +38,7 @@ def cmd(desc, pasos, acepta=False, limpiar=()):
 
 
 COMANDOS = {
-    # ---- Parte 1 (A)
+    # ---- Parte 1 
     "datos": cmd(
         "Genera pd.parquet y lgd.parquet desde data/raw/loan.csv "
         "(requiere el CSV original)",
@@ -88,7 +88,7 @@ COMANDOS = {
         ],
     ),
 
-    # ---- Redes neuronales (B)
+    # ---- Redes neuronales 
     "pd-mlp": cmd(
         "MLP de PD: --mode demo|search|final y rutas de salida nuevas",
         ["scripts/14_entrenar_mlp_pd.py"],
@@ -156,7 +156,7 @@ COMANDOS = {
         ["scripts/13_figura_lgd_lineal.py"],
     ),
 
-    # CORREGIDO: ahora utiliza perdida_esperada.py
+    
     "perdida-esperada": cmd(
         "Pérdida esperada E[L] = PD·LGD·EAD "
         "(admite --particion, --conjunto)",
