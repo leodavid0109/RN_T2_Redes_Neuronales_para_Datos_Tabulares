@@ -16,8 +16,8 @@ sys.path.insert(0, str(RAIZ))
 from src.scorecard import Scorecard  # noqa: E402
 from src.variables import INDICADOR_FALTANTE  # noqa: E402
 
-URL_REPORTE = "https://PEGAR-ENLACE-DEL-BLOG-UWU"
-URL_VIDEO = "https://PEGAR-ENLACE-DEL-VIDEO-UWU"
+URL_REPORTE = "https://docs.google.com/document/d/1zgkMypR1VCyuHHM7RAykrBTqefZshhRWupYpGh437-0/edit?usp=sharing"
+URL_VIDEO = "https://drive.google.com/file/d/1NEo6rGQ8-sltmPQS6vIRtChPBYKo1WTD/view?usp=sharing"
 
 # Etiquetas en lenguaje claro. Verificar cada una contra el diccionario de variables del conjunto.
 ETIQUETAS = {
