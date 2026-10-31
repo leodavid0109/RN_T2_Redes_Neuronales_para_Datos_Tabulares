@@ -168,4 +168,4 @@ E[L] = PD · LGD · EAD, con EAD = `funded_amnt` al originar. Con `--modelo refe
 
 ## Informe
 
-<[Informe de Trabajo](https://leodavid0109.github.io/RN_T2_Redes_Neuronales_para_Datos_Tabulares/informe/)>
+[Informe de Trabajo](https://leodavid0109.github.io/RN_T2_Redes_Neuronales_para_Datos_Tabulares/informe/)
