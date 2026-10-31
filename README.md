@@ -165,3 +165,7 @@ E[L] = PD · LGD · EAD, con EAD = `funded_amnt` al originar. Con `--modelo refe
 - Pública: <https://rnt2meprestas.streamlit.app/>.
 - `scripts/22_preparar_app.py` genera `app/datos_app.json` (rangos y valores por defecto); ya está versionado y solo hay que correrlo si cambian las variables.
 - La app calcula el puntaje con la regresión logística de la scorecard (`models/scorecard_referencia.json` y `results/score_distribution.csv`) y no guarda lo que el usuario ingresa.
+
+## Informe
+
+<[Informe de Trabajo](https://leodavid0109.github.io/RN_T2_Redes_Neuronales_para_Datos_Tabulares/informe/)>
